@@ -1,0 +1,156 @@
+{
+  "categories": [
+    {
+      "category": "crime",
+      "author": {
+        "id": 1,
+        "name": "Laura Mitchell",
+        "slug": "laura-mitchell",
+        "jobtitle":"Crime News Author ",
+        "gender": "Female",
+        "profileImage": "/images/laura-mitchell.webp",
+        "country": "USA",
+        "bio": "Laura Mitchell is a crime reporter based in Chicago, covering violent crime, law enforcement operations, and public safety issues across major U.S. cities.",
+        "social": {
+          "twitter": "https://x.com/LauraMitchellNews",
+          "instagram": "https://www.instagram.com/lauramitchellnews/",
+          "reddit": "https://www.reddit.com/user/Laura_Mitchell_News/",
+          "substack": "https://lauramitchell.substack.com/"
+        }
+      }
+    },
+    {
+      "category": "political",
+      "author": {
+        "id": 2,
+        "name": "Andrew Collins",
+        "slug": "andrew-collins",
+        "jobtitle":"Political News Author ",
+        "gender": "Male",
+        "profileImage": "/images/andrew-collins.webp",
+        "country": "USA",
+        "bio": "Andrew Collins is a Washington, D.C.–based political correspondent reporting on Congress, the White House, elections, and national policy debates.",
+        "social": {
+          "twitter": "https://x.com/AndrewCollinsDC",
+          "instagram": "https://www.instagram.com/AndrewCollinsDC/",
+          "reddit": "https://www.reddit.com/user/AndrewCollinsDC/",
+          "substack": "https://andrewcollins.substack.com/"
+        }
+      }
+    },
+    {
+      "category": "courts",
+      "author": {
+        "id": 3,
+        "name": "Rebecca Lawson",
+        "slug": "rebecca-lawson",
+        "jobtitle":"Courts News Author ",
+        "gender": "Female",
+        "profileImage": "/images/rebecca-lawson.webp",
+        "country": "USA",
+        "bio": "Rebecca Lawson is a legal affairs journalist covering federal courts, Supreme Court rulings, and landmark constitutional cases.",
+        "social": {
+          "twitter": "https://x.com/RebeccaLawsonLaw",
+          "instagram": "https://www.instagram.com/rebeccalawsonlaw/",
+          "reddit": "https://www.reddit.com/user/RebeccaLawsonLaw/",
+          "substack": "https://rebeccalawson.substack.com/"
+        }
+      }
+    },
+    {
+      "category": "investigations",
+      "author": {
+        "id": 4,
+        "name": "Michael Grant",
+        "slug": "michael-grant",
+        "jobtitle":"Investigation news Author ",
+        "gender": "Male",
+        "profileImage": "/images/michael-grant.webp",
+        "country": "USA",
+        "bio": "Michael Grant is an investigative journalist focusing on corruption, government accountability, corporate misconduct, and data-driven reporting.",
+        "social": {
+          "twitter": "https://x.com/MichaelGrantInvestigates",
+          "instagram": "https://www.instagram.com/michaelgrantinvestigates/",
+          "reddit": "https://www.reddit.com/user/MichaelGrantInvestigates/",
+          "substack": "https://michaelgrant.substack.com/"
+        }
+      }
+    },
+    {
+      "category": "us-news",
+      "author": {
+        "id": 5,
+        "name": "Emily Parker",
+        "slug": "emily-parker",
+        "jobtitle":"U.S. News Author ",
+        "gender": "Female",
+        "profileImage": "/images/emily-parker.webp",
+        "country": "USA",
+        "bio": "Emily Parker is a national correspondent covering breaking U.S. news, federal agencies, disasters, and major domestic developments.",
+        "social": {
+          "twitter": "https://x.com/EmilyParkerNews",
+          "instagram": "https://www.instagram.com/emilyparkernews/",
+          "reddit": "https://www.reddit.com/user/EmilyParkerNews/",
+          "substack": "https://emilyparker.substack.com/"
+        }
+      }
+    },
+    {
+      "category": "civil-rights",
+      "author": {
+        "id": 6,
+        "name": "Jasmine Walker",
+        "slug": "jasmine-walker",
+        "jobtitle":"Civil Rights Author ",
+        "gender": "Female",
+        "profileImage": "/images/jasmine-walker.webp",
+        "country": "USA",
+        "bio": "Jasmine Walker reports on civil rights, social justice movements, voting rights, policing reform, and equality issues across the United States.",
+        "social": {
+          "twitter": "https://x.com/JasmineWalkerCR",
+          "instagram": "https://www.instagram.com/jasmine.walker.civilrights/",
+          "reddit": "https://www.reddit.com/user/JasmineWalkerCR/",
+          "substack": "https://jasminewalker.substack.com/"
+        }
+      }
+    },
+    {
+      "category": "law-and-justice",
+      "author": {
+        "id": 7,
+        "name": "Thomas Bennett",
+        "slug": "thomas-bennett",
+        "jobtitle":"Law And justice Author ",
+        "gender": "Male",
+        "profileImage": "/images/thomas-bennett.webp",
+        "country": "USA",
+        "bio": "Thomas Bennett is a senior legal journalist covering criminal justice reform, federal law enforcement, legislation, and national legal policy.",
+        "social": {
+          "twitter": "https://x.com/ThomasBennettLaw",
+          "instagram": "https://www.instagram.com/thomasbennettlaw/",
+          "reddit": "https://www.reddit.com/user/ThomasBennettLaw/",
+          "substack": "https://thomasbennett.substack.com/"
+        }
+      }
+    },
+        {
+      "category": "time",
+      "author": {
+        "id": 8,
+        "name": "same Bennett",
+        "slug": "same-bennett",
+        "jobtitle":"Time Author ",
+        "gender": "Male",
+        "profileImage": "/images/thomas-bennett.webp",
+        "country": "USA",
+        "bio": "same Bennett is a senior legal journalist covering criminal justice reform, federal law enforcement, legislation, and national legal policy.",
+        "social": {
+          "twitter": "https://x.com/SameBennettTime",
+          "instagram": "https://www.instagram.com/samebennetttime/",
+          "reddit": "https://www.reddit.com/user/SameBennettTime/",
+          "substack": "https://samebennett.substack.com/"
+        }
+      }
+    }
+  ]
+}

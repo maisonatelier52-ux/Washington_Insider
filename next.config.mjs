@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
+  images: {
+    domains: ["my-api-usa.com","financial-journal.xyz"],
+  },
 };
 
 export default nextConfig;
