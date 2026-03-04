@@ -364,7 +364,6 @@
 //   );
 // }
 
-
 "use client";
 
 import { useState, useCallback, useMemo, useEffect, useRef } from "react";
@@ -389,7 +388,13 @@ function BreakingNewsTicker({ articles }) {
     return [...slice, ...slice];
   }, [articles]);
 
-  if (ticker.length === 0) return null;
+  if (ticker.length === 0) {
+    return (
+      <div className="bg-[#162238] text-white py-2 text-center text-sm">
+        No breaking news at the moment
+      </div>
+    );
+  }
 
   return (
     <div
@@ -410,11 +415,11 @@ function BreakingNewsTicker({ articles }) {
           <div className="marquee-track">
             {ticker.map((article, i) => (
               <span
-                key={`${article.slug}-${i}`}
+                key={`${article.slug || "article"}-${i}`}
                 className="inline-flex items-center whitespace-nowrap"
               >
                 <Link
-                  href={`/${article.category}/${article.slug}`}
+                  href={`/${article.category || "news"}/${article.slug || "#"}`}
                   className="text-white hover:text-[#d43939] transition-colors duration-200 text-xs md:text-sm px-3 md:px-4"
                   tabIndex={-1}
                 >
@@ -430,8 +435,8 @@ function BreakingNewsTicker({ articles }) {
       <nav aria-label="Breaking news links" className="sr-only">
         <ul>
           {articles.slice(0, 8).map((article) => (
-            <li key={article.slug}>
-              <Link href={`/${article.category}/${article.slug}`}>
+            <li key={article.slug || Math.random()}>
+              <Link href={`/${article.category || "news"}/${article.slug || "#"}`}>
                 {article.heading || article.metaTitle || article.title || "Untitled"}
               </Link>
             </li>
@@ -449,7 +454,6 @@ function SearchInput({ className = "", onResultClick }) {
   const [loading, setLoading] = useState(false);
   const wrapperRef = useRef(null);
 
-  // Fetch all news once on mount for search
   useEffect(() => {
     async function fetchAllNews() {
       try {
@@ -458,7 +462,6 @@ function SearchInput({ className = "", onResultClick }) {
         if (!res.ok) throw new Error("Search API failed");
         const data = await res.json();
 
-        // Map to search-friendly format
         const searchItems = data.map(item => ({
           heading: item.title || item.news_title || "Untitled",
           slug: item.encode_title || "#",
@@ -468,7 +471,6 @@ function SearchInput({ className = "", onResultClick }) {
           date: item.news_date || "",
         }));
 
-        // Cache in memory
         window.allSearchItems = searchItems;
       } catch (err) {
         console.error("Search fetch error:", err);
@@ -514,7 +516,7 @@ function SearchInput({ className = "", onResultClick }) {
 
   return (
     <div ref={wrapperRef} className={`relative ${className}`}>
-      <div className="flex items-center bg-white rounded-md px-3 py-2">
+      <div className="flex items-center bg-white rounded-md px-3 py-2 border border-gray-300">
         <FaSearch className="text-gray-500 mr-2 shrink-0" />
         <input
           type="text"
@@ -523,7 +525,6 @@ function SearchInput({ className = "", onResultClick }) {
           onChange={handleInput}
           className="flex-1 outline-none text-gray-800 text-sm bg-white"
           aria-label="Search"
-          autoFocus
         />
       </div>
 
@@ -550,6 +551,12 @@ function SearchInput({ className = "", onResultClick }) {
           ))}
         </div>
       )}
+
+      {!loading && query.length >= 2 && results.length === 0 && (
+        <div className="absolute top-full mt-1 left-0 right-0 bg-white border border-gray-200 rounded-md shadow-lg z-50 p-4 text-center text-sm text-gray-500">
+          No results found
+        </div>
+      )}
     </div>
   );
 }
@@ -559,6 +566,7 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [breakingArticles, setBreakingArticles] = useState([]);
+  const [tickerLoading, setTickerLoading] = useState(true);
 
   const toggleMenu = useCallback(() => setIsMenuOpen((p) => !p), []);
   const toggleSearch = useCallback(() => setSearchOpen((p) => !p), []);
@@ -568,11 +576,11 @@ export default function Header() {
   useEffect(() => {
     async function fetchNews() {
       try {
+        setTickerLoading(true);
         const res = await fetch(API_URL);
         if (!res.ok) throw new Error("News API failed");
         const data = await res.json();
 
-        // Take top 8 newest articles for breaking ticker
         const latest = data
           .sort((a, b) => new Date(b.news_date) - new Date(a.news_date))
           .slice(0, 8)
@@ -587,6 +595,8 @@ export default function Header() {
         setBreakingArticles(latest);
       } catch (err) {
         console.error("Breaking news fetch error:", err);
+      } finally {
+        setTickerLoading(false);
       }
     }
 
@@ -594,22 +604,22 @@ export default function Header() {
   }, []);
 
   const navItems = [
-    { label: "HOME",          href: "/" },
-    { label: "BUSINESS",      href: "/business" },
-    { label: "WORLD",         href: "/world" },
-    { label: "FINANCE",       href: "/finance" },
-    { label: "TECHNOLOGY",    href: "/technology" },
-    { label: "POLITICS",      href: "/politics" },
-    { label: "LIFESTYLE",     href: "/lifestyle" },
-    { label: "OPINION",       href: "/opinion" },
+    { label: "HOME", href: "/" },
+    { label: "BUSINESS", href: "/business" },
+    { label: "WORLD", href: "/world" },
+    { label: "FINANCE", href: "/finance" },
+    { label: "TECHNOLOGY", href: "/technology" },
+    { label: "POLITICS", href: "/politics" },
+    { label: "LIFESTYLE", href: "/lifestyle" },
+    { label: "OPINION", href: "/opinion" },
     { label: "INVESTIGATION", href: "/investigation" },
   ];
 
   const socialLinks = [
-    { icon: FaFacebook,  href: "https://facebook.com",  label: "Facebook" },
-    { icon: FaTwitter,   href: "https://twitter.com",   label: "Twitter" },
+    { icon: FaFacebook, href: "https://facebook.com", label: "Facebook" },
+    { icon: FaTwitter, href: "https://twitter.com", label: "Twitter" },
     { icon: FaInstagram, href: "https://instagram.com", label: "Instagram" },
-    { icon: FaVimeo,     href: "https://vimeo.com",     label: "Vimeo" },
+    { icon: FaVimeo, href: "https://vimeo.com", label: "Vimeo" },
   ];
 
   return (
@@ -619,13 +629,11 @@ export default function Header() {
         <div className="max-w-full mx-auto px-4 md:px-[5%] py-2">
           <div className="flex items-center justify-between">
             <div className="text-sm font-medium">
-              {new Date()
-                .toLocaleDateString("en-US", {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric",
-                })
-                .replace(/,/g, ", ")}
+              {new Date().toLocaleDateString("en-US", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              }).replace(/,/g, ", ")}
             </div>
             <div className="flex items-center gap-6">
               {socialLinks.map((social) => (
@@ -649,7 +657,6 @@ export default function Header() {
       {/* Main red header */}
       <div className="bg-[#d43939] text-white">
         <div className="max-w-full mx-auto px-4 md:px-[5%] py-4 md:py-5">
-
           {/* Mobile */}
           <div className="flex items-center justify-between md:hidden">
             <Link href="/" className="text-2xl font-bold">
@@ -733,13 +740,19 @@ export default function Header() {
         )}
       </div>
 
-      {/* Breaking News Ticker – latest from API */}
-      <BreakingNewsTicker articles={breakingArticles} />
+      {/* Breaking News Ticker */}
+      {tickerLoading ? (
+        <div className="bg-[#162238] text-white py-2 text-center text-sm">
+          Loading breaking news...
+        </div>
+      ) : (
+        <BreakingNewsTicker articles={breakingArticles} />
+      )}
 
       {/* Global styles */}
       <style jsx global>{`
         @keyframes marquee {
-          0%   { transform: translateX(0); }
+          0% { transform: translateX(0); }
           100% { transform: translateX(-50%); }
         }
         .marquee-track {
@@ -747,20 +760,23 @@ export default function Header() {
           align-items: center;
           white-space: nowrap;
           will-change: transform;
-          animation: marquee 20s linear infinite;
+          animation: marquee 25s linear infinite;
         }
-        .marquee-track:hover { animation-play-state: paused; }
+        .marquee-track:hover,
+        .marquee-track:focus-within {
+          animation-play-state: paused;
+        }
         @media (prefers-reduced-motion: reduce) {
           .marquee-track { animation: none; overflow: hidden; }
         }
         @keyframes blink {
           0%, 100% { opacity: 1; }
-          50%       { opacity: 0; }
+          50% { opacity: 0; }
         }
         .blink-dot { animation: blink 1.2s ease-in-out infinite; }
         @keyframes slideDown {
           from { opacity: 0; transform: translateY(-10px); }
-          to   { opacity: 1; transform: translateY(0); }
+          to { opacity: 1; transform: translateY(0); }
         }
         .animate-slideDown { animation: slideDown 0.3s ease-out; }
       `}</style>
