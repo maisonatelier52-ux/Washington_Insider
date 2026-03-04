@@ -1,154 +1,154 @@
 {
   "categories": [
     {
-      "category": "crime",
+      "category": "business",
       "author": {
         "id": 1,
-        "name": "Laura Mitchell",
-        "slug": "laura-mitchell",
-        "jobtitle":"Crime News Author ",
-        "gender": "Female",
-        "profileImage": "/images/laura-mitchell.webp",
+        "name": "Daniel Harper",
+        "slug": "daniel-harper",
+        "jobtitle": "Business News Author",
+        "gender": "Male",
+        "profileImage": "/images/daniel-harper.webp",
         "country": "USA",
-        "bio": "Laura Mitchell is a crime reporter based in Chicago, covering violent crime, law enforcement operations, and public safety issues across major U.S. cities.",
+        "bio": "Daniel Harper covers corporate strategy, startups, and global business trends, reporting on major companies and emerging industries.",
         "social": {
-          "twitter": "https://x.com/LauraMitchellNews",
-          "instagram": "https://www.instagram.com/lauramitchellnews/",
-          "reddit": "https://www.reddit.com/user/Laura_Mitchell_News/",
-          "substack": "https://lauramitchell.substack.com/"
+          "twitter": "https://x.com/danielharpernews",
+          "instagram": "https://instagram.com/danielharpernews",
+          "reddit": "https://reddit.com/user/danielharpernews",
+          "substack": "https://danielharper.substack.com"
         }
       }
     },
     {
-      "category": "political",
+      "category": "world",
       "author": {
         "id": 2,
-        "name": "Andrew Collins",
-        "slug": "andrew-collins",
-        "jobtitle":"Political News Author ",
-        "gender": "Male",
-        "profileImage": "/images/andrew-collins.webp",
-        "country": "USA",
-        "bio": "Andrew Collins is a Washington, D.C.–based political correspondent reporting on Congress, the White House, elections, and national policy debates.",
+        "name": "Sophia Bennett",
+        "slug": "sophia-bennett",
+        "jobtitle": "World News Author",
+        "gender": "Female",
+        "profileImage": "/images/sophia-bennett.webp",
+        "country": "UK",
+        "bio": "Sophia Bennett reports on international affairs, geopolitics, and global conflicts with a focus on diplomatic relations and world policy.",
         "social": {
-          "twitter": "https://x.com/AndrewCollinsDC",
-          "instagram": "https://www.instagram.com/AndrewCollinsDC/",
-          "reddit": "https://www.reddit.com/user/AndrewCollinsDC/",
-          "substack": "https://andrewcollins.substack.com/"
+          "twitter": "https://x.com/sophiabennettnews",
+          "instagram": "https://instagram.com/sophiabennettnews",
+          "reddit": "https://reddit.com/user/sophiabennettnews",
+          "substack": "https://sophiabennett.substack.com"
         }
       }
     },
     {
-      "category": "courts",
+      "category": "finance",
       "author": {
         "id": 3,
-        "name": "Rebecca Lawson",
-        "slug": "rebecca-lawson",
-        "jobtitle":"Courts News Author ",
-        "gender": "Female",
-        "profileImage": "/images/rebecca-lawson.webp",
+        "name": "Lucas Turner",
+        "slug": "lucas-turner",
+        "jobtitle": "Finance News Author",
+        "gender": "Male",
+        "profileImage": "/images/lucas-turner.webp",
         "country": "USA",
-        "bio": "Rebecca Lawson is a legal affairs journalist covering federal courts, Supreme Court rulings, and landmark constitutional cases.",
+        "bio": "Lucas Turner covers financial markets, banking, economic policy, and investment trends affecting global economies.",
         "social": {
-          "twitter": "https://x.com/RebeccaLawsonLaw",
-          "instagram": "https://www.instagram.com/rebeccalawsonlaw/",
-          "reddit": "https://www.reddit.com/user/RebeccaLawsonLaw/",
-          "substack": "https://rebeccalawson.substack.com/"
+          "twitter": "https://x.com/lucasturnerfinance",
+          "instagram": "https://instagram.com/lucasturnerfinance",
+          "reddit": "https://reddit.com/user/lucasturnerfinance",
+          "substack": "https://lucasturner.substack.com"
         }
       }
     },
     {
-      "category": "investigations",
+      "category": "technology",
       "author": {
         "id": 4,
-        "name": "Michael Grant",
-        "slug": "michael-grant",
-        "jobtitle":"Investigation news Author ",
-        "gender": "Male",
-        "profileImage": "/images/michael-grant.webp",
+        "name": "Ava Reynolds",
+        "slug": "ava-reynolds",
+        "jobtitle": "Technology News Author",
+        "gender": "Female",
+        "profileImage": "/images/ava-reynolds.webp",
         "country": "USA",
-        "bio": "Michael Grant is an investigative journalist focusing on corruption, government accountability, corporate misconduct, and data-driven reporting.",
+        "bio": "Ava Reynolds writes about artificial intelligence, emerging technologies, startups, and the impact of tech innovation on society.",
         "social": {
-          "twitter": "https://x.com/MichaelGrantInvestigates",
-          "instagram": "https://www.instagram.com/michaelgrantinvestigates/",
-          "reddit": "https://www.reddit.com/user/MichaelGrantInvestigates/",
-          "substack": "https://michaelgrant.substack.com/"
+          "twitter": "https://x.com/avareynoldstech",
+          "instagram": "https://instagram.com/avareynoldstech",
+          "reddit": "https://reddit.com/user/avareynoldstech",
+          "substack": "https://avareynolds.substack.com"
         }
       }
     },
     {
-      "category": "us-news",
+      "category": "politics",
       "author": {
         "id": 5,
-        "name": "Emily Parker",
-        "slug": "emily-parker",
-        "jobtitle":"U.S. News Author ",
-        "gender": "Female",
-        "profileImage": "/images/emily-parker.webp",
+        "name": "Nathan Caldwell",
+        "slug": "nathan-caldwell",
+        "jobtitle": "Politics News Author",
+        "gender": "Male",
+        "profileImage": "/images/nathan-caldwell.webp",
         "country": "USA",
-        "bio": "Emily Parker is a national correspondent covering breaking U.S. news, federal agencies, disasters, and major domestic developments.",
+        "bio": "Nathan Caldwell reports on elections, political strategy, policy debates, and government decisions shaping national and global politics.",
         "social": {
-          "twitter": "https://x.com/EmilyParkerNews",
-          "instagram": "https://www.instagram.com/emilyparkernews/",
-          "reddit": "https://www.reddit.com/user/EmilyParkerNews/",
-          "substack": "https://emilyparker.substack.com/"
+          "twitter": "https://x.com/nathancaldwellnews",
+          "instagram": "https://instagram.com/nathancaldwellnews",
+          "reddit": "https://reddit.com/user/nathancaldwellnews",
+          "substack": "https://nathancaldwell.substack.com"
         }
       }
     },
     {
-      "category": "civil-rights",
+      "category": "lifestyle",
       "author": {
         "id": 6,
-        "name": "Jasmine Walker",
-        "slug": "jasmine-walker",
-        "jobtitle":"Civil Rights Author ",
+        "name": "Olivia Hart",
+        "slug": "olivia-hart",
+        "jobtitle": "Lifestyle Author",
         "gender": "Female",
-        "profileImage": "/images/jasmine-walker.webp",
-        "country": "USA",
-        "bio": "Jasmine Walker reports on civil rights, social justice movements, voting rights, policing reform, and equality issues across the United States.",
+        "profileImage": "/images/olivia-hart.webp",
+        "country": "Canada",
+        "bio": "Olivia Hart writes about wellness, culture, travel, and modern living trends shaping everyday lifestyles.",
         "social": {
-          "twitter": "https://x.com/JasmineWalkerCR",
-          "instagram": "https://www.instagram.com/jasmine.walker.civilrights/",
-          "reddit": "https://www.reddit.com/user/JasmineWalkerCR/",
-          "substack": "https://jasminewalker.substack.com/"
+          "twitter": "https://x.com/oliviahartlife",
+          "instagram": "https://instagram.com/oliviahartlife",
+          "reddit": "https://reddit.com/user/oliviahartlife",
+          "substack": "https://oliviahart.substack.com"
         }
       }
     },
     {
-      "category": "law-and-justice",
+      "category": "opinion",
       "author": {
         "id": 7,
-        "name": "Thomas Bennett",
-        "slug": "thomas-bennett",
-        "jobtitle":"Law And justice Author ",
+        "name": "Ethan Brooks",
+        "slug": "ethan-brooks",
+        "jobtitle": "Opinion Columnist",
         "gender": "Male",
-        "profileImage": "/images/thomas-bennett.webp",
+        "profileImage": "/images/ethan-brooks.webp",
         "country": "USA",
-        "bio": "Thomas Bennett is a senior legal journalist covering criminal justice reform, federal law enforcement, legislation, and national legal policy.",
+        "bio": "Ethan Brooks writes opinion and analysis pieces exploring politics, culture, and current affairs from a critical perspective.",
         "social": {
-          "twitter": "https://x.com/ThomasBennettLaw",
-          "instagram": "https://www.instagram.com/thomasbennettlaw/",
-          "reddit": "https://www.reddit.com/user/ThomasBennettLaw/",
-          "substack": "https://thomasbennett.substack.com/"
+          "twitter": "https://x.com/ethanbrooksopinion",
+          "instagram": "https://instagram.com/ethanbrooksopinion",
+          "reddit": "https://reddit.com/user/ethanbrooksopinion",
+          "substack": "https://ethanbrooks.substack.com"
         }
       }
     },
-        {
-      "category": "time",
+    {
+      "category": "investigation",
       "author": {
         "id": 8,
-        "name": "same Bennett",
-        "slug": "same-bennett",
-        "jobtitle":"Time Author ",
+        "name": "Marcus Hale",
+        "slug": "marcus-hale",
+        "jobtitle": "Investigative Journalist",
         "gender": "Male",
-        "profileImage": "/images/thomas-bennett.webp",
+        "profileImage": "/images/marcus-hale.webp",
         "country": "USA",
-        "bio": "same Bennett is a senior legal journalist covering criminal justice reform, federal law enforcement, legislation, and national legal policy.",
+        "bio": "Marcus Hale specializes in investigative reporting uncovering corruption, hidden financial networks, and accountability issues.",
         "social": {
-          "twitter": "https://x.com/SameBennettTime",
-          "instagram": "https://www.instagram.com/samebennetttime/",
-          "reddit": "https://www.reddit.com/user/SameBennettTime/",
-          "substack": "https://samebennett.substack.com/"
+          "twitter": "https://x.com/marcushaleinvest",
+          "instagram": "https://instagram.com/marcushaleinvest",
+          "reddit": "https://reddit.com/user/marcushaleinvest",
+          "substack": "https://marcushale.substack.com"
         }
       }
     }

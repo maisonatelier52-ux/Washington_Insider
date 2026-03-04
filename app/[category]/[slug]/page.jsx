@@ -468,7 +468,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import Sidebar from "../../../components/Sidebar";
+import DSidebar from "../../../components/DSidebar";
 import { FaFacebookF } from "react-icons/fa6";
 import { FaXTwitter } from "react-icons/fa6";
 import { FaPinterestP } from "react-icons/fa";
@@ -737,7 +737,7 @@ export default async function ArticleDetailPage({ params }) {
 
           {/* ── RIGHT: Sidebar ── */}
           <div className="lg:col-span-1 px-1">
-            <Sidebar
+            <DSidebar
               heroArticle={allArticles[0]}
               selectedArticles={allArticles.slice(1, 3)}
               smallArticles={allArticles.slice(4, 6)}
