@@ -248,7 +248,6 @@
 //     </main>
 //   );
 // }
-
 import Image from "next/image";
 import Link from "next/link";
 import LatestNews from "../components/LatestNews";
@@ -365,7 +364,7 @@ export default async function Home() {
     const categoryName = item.category?.category_name
       ?.toLowerCase()
       .replace(/\s+/g, "-");
-    if (!categoryName) return acc;
+    if (!categoryName || categoryName === "puerto-rico") return acc;
     if (!acc[categoryName]) acc[categoryName] = [];
 
     acc[categoryName].push({

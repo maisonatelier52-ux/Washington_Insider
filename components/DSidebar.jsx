@@ -34,15 +34,17 @@ function SearchInput({ className = "", onResultClick }) {
         if (!res.ok) throw new Error("Search API failed");
         const data = await res.json();
 
-        // Map to search-friendly format
-        const searchItems = data.map(item => ({
-          heading: item.title || item.news_title || "Untitled",
-          slug: item.encode_title || "#",
-          category: item.category?.category_name
-            ?.toLowerCase()
-            .replace(/\s+/g, "-") || "news",
-          date: item.news_date || "",
-        }));
+        // Map to search-friendly format and filter out Puerto-Rico
+        const searchItems = data
+          .map(item => ({
+            heading: item.title || item.news_title || "Untitled",
+            slug: item.encode_title || "#",
+            category: item.category?.category_name
+              ?.toLowerCase()
+              .replace(/\s+/g, "-") || "news",
+            date: item.news_date || "",
+          }))
+          .filter(item => item.category !== "puerto-rico");
 
         window.allSearchItems = searchItems; // simple cache
       } catch (err) {
