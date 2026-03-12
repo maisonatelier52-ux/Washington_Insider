@@ -2,8 +2,12 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { FaFacebook, FaTwitter, FaInstagram, FaVimeo } from "react-icons/fa";
+import { FaFacebook, FaVimeo } from "react-icons/fa";
 import { useState, useEffect } from "react";
+import { BsSubstack } from "react-icons/bs";
+import { IoLogoReddit } from "react-icons/io5";
+import { FaInstagram } from "react-icons/fa";
+import { RiTwitterXFill } from "react-icons/ri";
 
 // API endpoints
 const NEWS_API = "https://my-api-usa.com/p16/API/api/news";
@@ -25,16 +29,17 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   const footerLinks = [
-    { label: "ABOUT", href: "/about" },
-    { label: "CONTACT", href: "/contact" },
-    { label: "TERMS OF USE", href: "/terms" },
+    { label: "ABOUT US", href: "/about-us" },
+    { label: "PRIVACY POLICY", href: "/privcay-policy" },
+    { label: "TERMS AND CONDTIONS", href: "/terms-and-conditions" },
+
   ];
 
   const socialLinks = [
-    { icon: FaFacebook, href: "https://facebook.com/shadowledger", label: "Facebook" },
-    { icon: FaTwitter, href: "https://x.com/shadowledger", label: "Twitter" },
+    { icon: RiTwitterXFill, href: "https://facebook.com/shadowledger", label: "X (Twitter)" },
+    { icon: IoLogoReddit, href: "https://x.com/shadowledger", label: "Reddit" },
     { icon: FaInstagram, href: "https://instagram.com/shadowledger", label: "Instagram" },
-    { icon: FaVimeo, href: "https://vimeo.com/shadowledger", label: "Vimeo" },
+    { icon: BsSubstack , href: "https://instagram.com/shadowledger", label: "Substack" },
   ];
 
   // Featured article + categories state

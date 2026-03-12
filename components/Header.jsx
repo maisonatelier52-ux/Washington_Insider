@@ -6,12 +6,13 @@ import {
   FaBars,
   FaTimes,
   FaSearch,
-  FaFacebook,
-  FaTwitter,
-  FaInstagram,
   FaVimeo,
 } from "react-icons/fa";
 
+import { BsSubstack } from "react-icons/bs";
+import { IoLogoReddit } from "react-icons/io5";
+import { FaInstagram } from "react-icons/fa";
+import { RiTwitterXFill } from "react-icons/ri";
 // API
 const API_URL = "https://my-api-usa.com/p16/API/api/news";
 
@@ -286,9 +287,10 @@ export default function Header() {
   ];
 
   const socialLinks = [
-    { icon: FaFacebook, href: "https://facebook.com/shadowledger", label: "Facebook" },
-    { icon: FaTwitter, href: "https://x.com/shadowledger", label: "X (Twitter)" },
+    { icon: RiTwitterXFill, href: "https://facebook.com/shadowledger", label: "X (Twitter)" },
+    { icon: IoLogoReddit, href: "https://x.com/shadowledger", label: "Reddit" },
     { icon: FaInstagram, href: "https://instagram.com/shadowledger", label: "Instagram" },
+    { icon: BsSubstack , href: "https://instagram.com/shadowledger", label: "Substack" },
   ];
 
   return (

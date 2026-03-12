@@ -168,7 +168,7 @@ export default function ArticleCard({ article, category }) {
   }, [category]);
 
   return (
-    <article className="group flex flex-col pt-5">
+    <article className="group flex flex-col">
 
       {/* Image */}
 
