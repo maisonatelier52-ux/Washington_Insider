@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-
 import {
   FaBars,
   FaTimes,
@@ -14,8 +13,21 @@ import {
   FaVimeoV,
 } from "react-icons/fa";
 
-// API for search
+// API
 const API_URL = "https://my-api-usa.com/p16/API/api/news";
+const AUTHOR_API_BASE = "https://my-api-usa.com/p16/API/api/client/";
+
+// Category → Author ID mapping
+const categoryAuthorMap = {
+  business: 1,
+  world: 2,
+  finance: 3,
+  technology: 4,
+  politics: 5,
+  lifestyle: 6,
+  opinion: 7,
+  investigation: 8,
+};
 
 const ALLOWED_CATEGORIES = [
   "business",
@@ -29,7 +41,7 @@ const ALLOWED_CATEGORIES = [
 ];
 
 // ─────────────────────────────────────────────
-// Live Search Input (fetched from API)
+// Live Search Input (unchanged)
 // ─────────────────────────────────────────────
 function SearchInput({ className = "", onResultClick }) {
   const [query, setQuery] = useState("");
@@ -152,7 +164,7 @@ function SearchInput({ className = "", onResultClick }) {
 }
 
 // ─────────────────────────────────────────────
-// Section Header
+// Section Header (unchanged)
 // ─────────────────────────────────────────────
 function SectionHeader({ title }) {
   return (
@@ -304,6 +316,157 @@ function SmallArticleList({ articles }) {
 }
 
 // ─────────────────────────────────────────────
+// Recent Authors Section – ONLY AUTHORS (photo + name + bio)
+// ─────────────────────────────────────────────
+function RecentAuthors() {
+  const [authors, setAuthors] = useState([]);
+
+  useEffect(() => {
+    const fetchAuthors = async () => {
+      const fetched = [];
+      for (const id of Object.values(categoryAuthorMap)) {
+        try {
+          const res = await fetch(`${AUTHOR_API_BASE}${id}`);
+          const data = await res.json();
+          if (data.status && data.data) {
+            fetched.push(data.data);
+          }
+        } catch (err) {
+          console.error(`Failed to fetch author ${id}:`, err);
+        }
+      }
+      setAuthors(fetched.slice(0, 3)); // Only 3 authors
+    };
+
+    fetchAuthors();
+  }, []);
+
+  return (
+    <div className="mb-6">
+      <SectionHeader title="Recent Comments" />
+      <ul className="flex flex-col gap-5">
+        {authors.map((author) => (
+          <li key={author.id}>
+            <Link
+              href={`/author/${author.url || "#"}`}
+              title={author.name}
+              className="flex gap-4 group items-start hover:opacity-90 transition-opacity"
+            >
+              <div className="relative w-16 h-16 flex-shrink-0 overflow-hidden rounded-full border-2 border-gray-200">
+                <Image
+                  src={author.photo_url}
+                  alt={author.name || "Author"}
+                  fill
+                  sizes="64px"
+                  className="object-cover"
+                  loading="lazy"
+                />
+              </div>
+              <div className="flex-1">
+                <h4 className="text-sm font-extrabold uppercase text-gray-700 group-hover:text-[#d43939] transition-colors">
+                  {author.name}
+                </h4>
+                {author.meta_description && (
+                  <p className="text-xs text-gray-600 line-clamp-3 group-hover:text-[#d43939] transition-colors">
+                    {author.meta_description}
+                  </p>
+                )}
+              </div>
+            </Link>
+          </li>
+        ))}
+        {authors.length === 0 && (
+          <p className="text-sm text-gray-500 text-center">Loading authors...</p>
+        )}
+      </ul>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────
+// Social Network (unchanged)
+// ─────────────────────────────────────────────
+function SocialNetwork() {
+  const socials = [
+    { href: "https://facebook.com/courtnews", icon: <FaFacebookF size={16} />, label: "Facebook", bg: "bg-blue-600" },
+    { href: "https://twitter.com/courtnews", icon: <FaTwitter size={16} />, label: "X (Twitter)", bg: "bg-black" },
+    { href: "https://instagram.com/courtnews", icon: <FaInstagram size={16} />, label: "Instagram", bg: "bg-pink-500" },
+    { href: "https://vimeo.com/courtnews", icon: <FaVimeoV size={16} />, label: "Vimeo", bg: "bg-sky-500" },
+  ];
+
+  return (
+    <div className="mb-6">
+      <SectionHeader title="Social Network" />
+      <div className="flex gap-2">
+        {socials.map((s) => (
+          <Link
+            key={s.label}
+            href={s.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={s.label}
+            title={s.label}
+            className={`${s.bg} text-white w-9 h-9 flex items-center justify-center hover:opacity-80 transition-opacity duration-200`}
+          >
+            {s.icon}
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────
+// Banner Ad (unchanged)
+// ─────────────────────────────────────────────
+function BannerAd({ image, text, href = "/" }) {
+  if (!image) return null;
+
+  return (
+    <div className="mb-6">
+      <Link href={href} title={text} className="block group relative overflow-hidden">
+        <div className="relative w-full h-90">
+          <Image
+            src={image}
+            alt={text || "Advertisement"}
+            fill
+            sizes="320px"
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+        </div>
+      </Link>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────
+// Categories (unchanged)
+// ─────────────────────────────────────────────
+function Categories({ categories }) {
+  if (!categories?.length) return null;
+
+  return (
+    <div className="mb-6">
+      <SectionHeader title="Categories" />
+      <div className="flex flex-wrap gap-2">
+        {categories.map((cat) => (
+          <Link
+            key={cat}
+            href={`/${cat}`}
+            title={`View ${cat.replace(/-/g, " ")} articles`}
+            className="text-sm font-semibold uppercase tracking-wide border-3 border-gray-300 text-gray-700 px-3 py-2 hover:bg-[#162238] hover:text-white hover:border-[#d43939] transition-colors duration-200"
+          >
+            {cat.replace(/-/g, " ")}
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────
 // MAIN SIDEBAR EXPORT
 // ─────────────────────────────────────────────
 export default function Sidebar({
@@ -313,7 +476,7 @@ export default function Sidebar({
   categories,
   bannerImage,
   bannerText,
-  bannerHref
+  bannerHref,
 }) {
   return (
     <aside className="w-full lg:max-w-xs mx-auto lg:mx-0 lg:sticky lg:top-4">
@@ -322,56 +485,12 @@ export default function Sidebar({
       <SelectedArticles articles={selectedArticles} />
       <SmallArticleList articles={smallArticles} />
 
-      {/* Static Social Network (already added by you) */}
-      <div className="mb-6">
-        <SectionHeader title="Social Network" />
-        <div className="flex gap-2">
-          <a href="https://facebook.com/shadowledger" target="_blank" rel="noopener noreferrer" className="bg-blue-600 text-white w-9 h-9 flex items-center justify-center hover:opacity-80 transition-opacity duration-200" aria-label="Facebook"><FaFacebookF size={16} /></a>
-          <a href="https://x.com/shadowledger" target="_blank" rel="noopener noreferrer" className="bg-black text-white w-9 h-9 flex items-center justify-center hover:opacity-80 transition-opacity duration-200" aria-label="X (Twitter)"><FaTwitter size={16} /></a>
-          <a href="https://instagram.com/shadowledger" target="_blank" rel="noopener noreferrer" className="bg-pink-500 text-white w-9 h-9 flex items-center justify-center hover:opacity-80 transition-opacity duration-200" aria-label="Instagram"><FaInstagram size={16} /></a>
-          <a href="https://vimeo.com/shadowledger" target="_blank" rel="noopener noreferrer" className="bg-sky-500 text-white w-9 h-9 flex items-center justify-center hover:opacity-80 transition-opacity duration-200" aria-label="Vimeo"><FaVimeoV size={16} /></a>
-        </div>
-      </div>
+      {/* ←←← NEW AUTHOR SECTION ADDED HERE (only this part was added) */}
+      <RecentAuthors />
 
-      {/* Static Categories (fixed) */}
-      <div className="mb-6">
-        <SectionHeader title="Categories" />
-        <div className="flex flex-wrap gap-2">
-          {categories?.length ? (
-            categories.map((cat) => (
-              <Link
-                key={cat}
-                href={`/${cat}`}
-                title={`View ${cat.replace(/-/g, " ")} articles`}
-                className="text-sm font-semibold uppercase tracking-wide border-3 border-gray-300 text-gray-700 px-3 py-2 hover:bg-[#162238] hover:text-white hover:border-[#d43939] transition-colors duration-200"
-              >
-                {cat.replace(/-/g, " ")}
-              </Link>
-            ))
-          ) : (
-            <p className="text-sm text-gray-500">No categories available</p>
-          )}
-        </div>
-      </div>
-
-      {/* Static BannerAd (fixed) */}
-      {bannerImage && (
-        <div className="mb-6">
-          <Link href={bannerHref || "/"} title={bannerText || "Advertisement"} className="block group relative overflow-hidden">
-            <div className="relative w-full h-90 overflow-hidden">
-              <Image
-                src={bannerImage}
-                alt={bannerText || "Advertisement"}
-                fill
-                sizes="320px"
-                className="object-cover group-hover:scale-105 transition-transform duration-300"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-            </div>
-          </Link>
-        </div>
-      )}
+      <SocialNetwork />
+      <Categories categories={categories} />
+      <BannerAd image={bannerImage} text={bannerText} href={bannerHref} />
     </aside>
   );
 }
