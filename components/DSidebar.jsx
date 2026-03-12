@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
+
 import {
   FaBars,
   FaTimes,
@@ -16,6 +17,17 @@ import {
 // API for search
 const API_URL = "https://my-api-usa.com/p16/API/api/news";
 
+const ALLOWED_CATEGORIES = [
+  "business",
+  "world",
+  "finance",
+  "technology",
+  "politics",
+  "lifestyle",
+  "opinion",
+  "investigation",
+];
+
 // ─────────────────────────────────────────────
 // Live Search Input (fetched from API)
 // ─────────────────────────────────────────────
@@ -25,28 +37,29 @@ function SearchInput({ className = "", onResultClick }) {
   const [loading, setLoading] = useState(false);
   const wrapperRef = useRef(null);
 
-  // Fetch all news once on mount
   useEffect(() => {
     async function fetchAllNews() {
       try {
         setLoading(true);
-        const res = await fetch(API_URL);
+        const res = await fetch(API_URL, { cache: "no-store" });
         if (!res.ok) throw new Error("Search API failed");
         const data = await res.json();
 
-        // Map to search-friendly format and filter out Puerto-Rico
         const searchItems = data
-          .map(item => ({
+          .filter((item) => {
+            const cat = item.category?.category_name?.toLowerCase() || "";
+            return ALLOWED_CATEGORIES.includes(cat);
+          })
+          .map((item) => ({
             heading: item.title || item.news_title || "Untitled",
             slug: item.encode_title || "#",
             category: item.category?.category_name
               ?.toLowerCase()
               .replace(/\s+/g, "-") || "news",
             date: item.news_date || "",
-          }))
-          .filter(item => item.category !== "puerto-rico");
+          }));
 
-        window.allSearchItems = searchItems; // simple cache
+        window.allSearchItems = searchItems;
       } catch (err) {
         console.error("Search fetch error:", err);
       } finally {
@@ -58,16 +71,18 @@ function SearchInput({ className = "", onResultClick }) {
   }, []);
 
   function handleInput(e) {
-    const val = e.target.value.trim();
-    setQuery(val);
+    const value = e.target.value;
+    setQuery(value);
 
-    if (val.length < 2) {
+    if (value.trim().length < 2) {
       setResults([]);
       return;
     }
 
     const filtered = (window.allSearchItems || [])
-      .filter(item => item.heading?.toLowerCase().includes(val.toLowerCase()))
+      .filter((item) =>
+        item.heading?.toLowerCase().includes(value.toLowerCase())
+      )
       .slice(0, 6);
 
     setResults(filtered);
@@ -126,6 +141,12 @@ function SearchInput({ className = "", onResultClick }) {
           ))}
         </div>
       )}
+
+      {!loading && query.trim().length >= 2 && results.length === 0 && (
+        <div className="absolute top-full mt-1 left-0 right-0 bg-white border border-gray-200 rounded-md shadow-lg z-50 p-4 text-center text-sm text-gray-500">
+          No results found
+        </div>
+      )}
     </div>
   );
 }
@@ -145,7 +166,7 @@ function SectionHeader({ title }) {
 }
 
 // ─────────────────────────────────────────────
-// Hero Card
+// Hero Card, SelectedArticles, SmallArticleList (unchanged)
 // ─────────────────────────────────────────────
 function HeroCard({ article }) {
   if (!article) return null;
@@ -154,6 +175,9 @@ function HeroCard({ article }) {
   const title = article.heading || article.metaTitle || "Untitled";
   const href = `/${article.category || "news"}/${article.slug || "#"}`;
   const date = article.date || "—";
+
+  const cat = article.category?.toLowerCase() || "";
+  if (!ALLOWED_CATEGORIES.includes(cat)) return null;
 
   return (
     <Link href={href} title={title} className="block group mb-4">
@@ -183,17 +207,21 @@ function HeroCard({ article }) {
   );
 }
 
-// ─────────────────────────────────────────────
-// Selected Articles
-// ─────────────────────────────────────────────
 function SelectedArticles({ articles }) {
   if (!articles?.length) return null;
+
+  const filtered = articles.filter((a) => {
+    const cat = a.category?.toLowerCase() || "";
+    return ALLOWED_CATEGORIES.includes(cat);
+  });
+
+  if (filtered.length === 0) return null;
 
   return (
     <div className="mb-6">
       <SectionHeader title="Latest News" />
       <ul className="flex flex-col gap-5">
-        {articles.map((article) => {
+        {filtered.map((article) => {
           const image = article.image || article.heroImage || "/images/placeholder.webp";
           const title = article.heading || article.metaTitle || "Untitled";
           const href = `/${article.category || "news"}/${article.slug || "#"}`;
@@ -231,16 +259,20 @@ function SelectedArticles({ articles }) {
   );
 }
 
-// ─────────────────────────────────────────────
-// Small Thumbnail List
-// ─────────────────────────────────────────────
 function SmallArticleList({ articles }) {
   if (!articles?.length) return null;
+
+  const filtered = articles.filter((a) => {
+    const cat = a.category?.toLowerCase() || "";
+    return ALLOWED_CATEGORIES.includes(cat);
+  });
+
+  if (filtered.length === 0) return null;
 
   return (
     <div className="mb-6">
       <ul className="flex flex-col gap-3">
-        {articles.map((article) => {
+        {filtered.map((article) => {
           const image = article.image || article.heroImage || "/images/placeholder.webp";
           const title = article.heading || article.metaTitle || "Untitled";
           const href = `/${article.category || "news"}/${article.slug || "#"}`;
@@ -272,111 +304,6 @@ function SmallArticleList({ articles }) {
 }
 
 // ─────────────────────────────────────────────
-// Social Network
-// ─────────────────────────────────────────────
-function SocialNetwork() {
-  const socials = [
-    { href: "https://facebook.com/courtnews", icon: <FaFacebookF size={16} />, label: "Facebook", bg: "bg-blue-600" },
-    { href: "https://twitter.com/courtnews", icon: <FaTwitter size={16} />, label: "X (Twitter)", bg: "bg-black" },
-    { href: "https://instagram.com/courtnews", icon: <FaInstagram size={16} />, label: "Instagram", bg: "bg-pink-500" },
-    { href: "https://vimeo.com/courtnews", icon: <FaVimeoV size={16} />, label: "Vimeo", bg: "bg-sky-500" },
-  ];
-
-  return (
-    <div className="mb-6">
-      <SectionHeader title="Social Network" />
-      <div className="flex gap-2">
-        {socials.map((s) => (
-          <Link
-            key={s.label}
-            href={s.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={s.label}
-            title={s.label}
-            className={`${s.bg} text-white w-9 h-9 flex items-center justify-center hover:opacity-80 transition-opacity duration-200`}
-          >
-            {s.icon}
-          </Link>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ─────────────────────────────────────────────
-// Banner Ad
-// ─────────────────────────────────────────────
-function BannerAd({ image, text, href = "/" }) {
-  if (!image) return null;
-
-  return (
-    <div className="mb-6">
-      <Link href={href} title={text} className="block group relative overflow-hidden">
-        <div className="relative w-full h-44">
-          <Image
-            src={image}
-            alt={text || "Advertisement"}
-            fill
-            sizes="320px"
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
-            loading="lazy"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-          {text && (
-            <div className="absolute bottom-0 left-0 right-0 px-4 py-3">
-              <p className="text-white text-base font-extrabold leading-snug">{text}</p>
-            </div>
-          )}
-        </div>
-      </Link>
-    </div>
-  );
-}
-
-// ─────────────────────────────────────────────
-// Categories
-// ─────────────────────────────────────────────
-function Categories({ categories }) {
-  if (!categories?.length) return null;
-
-  return (
-    <div className="mb-6">
-      <SectionHeader title="Categories" />
-      <div className="flex flex-wrap gap-2">
-        {categories.map((cat) => (
-          <Link
-            key={cat}
-            href={`/${cat}`}
-            title={`View ${cat.replace(/-/g, " ")} articles`}
-            className="text-sm font-semibold uppercase tracking-wide border-3 border-gray-300 text-gray-700 px-3 py-2 hover:bg-[#162238] hover:text-white hover:border-[#d43939] transition-colors duration-200"
-          >
-            {cat.replace(/-/g, " ")}
-          </Link>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ─────────────────────────────────────────────
-// Display Ad
-// ─────────────────────────────────────────────
-function DisplayAd({ adCode }) {
-  return (
-    <div className="mb-6">
-      {adCode ? (
-        <div dangerouslySetInnerHTML={{ __html: adCode }} />
-      ) : (
-        <div className="w-full h-[250px] bg-gray-100 border border-gray-300 flex items-center justify-center text-gray-400 text-xs font-semibold uppercase shadow-sm">
-          300 × 250 Advertisement
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ─────────────────────────────────────────────
 // MAIN SIDEBAR EXPORT
 // ─────────────────────────────────────────────
 export default function Sidebar({
@@ -386,21 +313,65 @@ export default function Sidebar({
   categories,
   bannerImage,
   bannerText,
-  bannerHref,
-  adCode,
+  bannerHref
 }) {
   return (
     <aside className="w-full lg:max-w-xs mx-auto lg:mx-0 lg:sticky lg:top-4">
-
       <HeroCard article={heroArticle} />
-      <SearchInput className="mb-6" /> {/* Live API search added here */}
+      <SearchInput className="mb-6" />
       <SelectedArticles articles={selectedArticles} />
       <SmallArticleList articles={smallArticles} />
-      <SocialNetwork />
-      <BannerAd image={bannerImage} text={bannerText} href={bannerHref} />
-      <Categories categories={categories} />
-      <DisplayAd adCode={adCode} />
 
+      {/* Static Social Network (already added by you) */}
+      <div className="mb-6">
+        <SectionHeader title="Social Network" />
+        <div className="flex gap-2">
+          <a href="https://facebook.com/shadowledger" target="_blank" rel="noopener noreferrer" className="bg-blue-600 text-white w-9 h-9 flex items-center justify-center hover:opacity-80 transition-opacity duration-200" aria-label="Facebook"><FaFacebookF size={16} /></a>
+          <a href="https://x.com/shadowledger" target="_blank" rel="noopener noreferrer" className="bg-black text-white w-9 h-9 flex items-center justify-center hover:opacity-80 transition-opacity duration-200" aria-label="X (Twitter)"><FaTwitter size={16} /></a>
+          <a href="https://instagram.com/shadowledger" target="_blank" rel="noopener noreferrer" className="bg-pink-500 text-white w-9 h-9 flex items-center justify-center hover:opacity-80 transition-opacity duration-200" aria-label="Instagram"><FaInstagram size={16} /></a>
+          <a href="https://vimeo.com/shadowledger" target="_blank" rel="noopener noreferrer" className="bg-sky-500 text-white w-9 h-9 flex items-center justify-center hover:opacity-80 transition-opacity duration-200" aria-label="Vimeo"><FaVimeoV size={16} /></a>
+        </div>
+      </div>
+
+      {/* Static Categories (fixed) */}
+      <div className="mb-6">
+        <SectionHeader title="Categories" />
+        <div className="flex flex-wrap gap-2">
+          {categories?.length ? (
+            categories.map((cat) => (
+              <Link
+                key={cat}
+                href={`/${cat}`}
+                title={`View ${cat.replace(/-/g, " ")} articles`}
+                className="text-sm font-semibold uppercase tracking-wide border-3 border-gray-300 text-gray-700 px-3 py-2 hover:bg-[#162238] hover:text-white hover:border-[#d43939] transition-colors duration-200"
+              >
+                {cat.replace(/-/g, " ")}
+              </Link>
+            ))
+          ) : (
+            <p className="text-sm text-gray-500">No categories available</p>
+          )}
+        </div>
+      </div>
+
+      {/* Static BannerAd (fixed) */}
+      {bannerImage && (
+        <div className="mb-6">
+          <Link href={bannerHref || "/"} title={bannerText || "Advertisement"} className="block group relative overflow-hidden">
+            <div className="relative w-full h-90 overflow-hidden">
+              <Image
+                src={bannerImage}
+                alt={bannerText || "Advertisement"}
+                fill
+                sizes="320px"
+                className="object-cover group-hover:scale-105 transition-transform duration-300"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+            </div>
+          </Link>
+        </div>
+      )}
     </aside>
   );
 }

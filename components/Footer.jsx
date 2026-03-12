@@ -9,6 +9,18 @@ import { useState, useEffect } from "react";
 const NEWS_API = "https://my-api-usa.com/p16/API/api/news";
 const CATEGORIES_API = "https://my-api-usa.com/p16/API/api/categories";
 
+// Your selected categories (same as sidebar/header)
+const ALLOWED_CATEGORIES = [
+  "business",
+  "world",
+  "finance",
+  "technology",
+  "politics",
+  "lifestyle",
+  "opinion",
+  "investigation",
+];
+
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
@@ -19,17 +31,15 @@ const Footer = () => {
   ];
 
   const socialLinks = [
-    { icon: FaFacebook, href: "https://facebook.com", label: "Facebook" },
-    { icon: FaTwitter, href: "https://twitter.com", label: "Twitter" },
-    { icon: FaInstagram, href: "https://instagram.com", label: "Instagram" },
-    { icon: FaVimeo, href: "https://vimeo.com", label: "Vimeo" },
+    { icon: FaFacebook, href: "https://facebook.com/shadowledger", label: "Facebook" },
+    { icon: FaTwitter, href: "https://x.com/shadowledger", label: "Twitter" },
+    { icon: FaInstagram, href: "https://instagram.com/shadowledger", label: "Instagram" },
+    { icon: FaVimeo, href: "https://vimeo.com/shadowledger", label: "Vimeo" },
   ];
 
-  // Featured article from API
+  // Featured article + categories state
   const [featuredArticle, setFeaturedArticle] = useState(null);
-  // Real categories from API
   const [popularCategories, setPopularCategories] = useState([]);
-
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -37,19 +47,20 @@ const Footer = () => {
       try {
         setLoading(true);
 
-        // Fetch latest news
+        // 1. Fetch all news
         const newsRes = await fetch(NEWS_API);
         if (!newsRes.ok) throw new Error("News API failed");
         const newsData = await newsRes.json();
 
-        // Filter out Puerto Rico articles
-        const filteredNews = newsData.filter(
-          (item) =>
-            (item.category?.category_name || "")
-              .toLowerCase()
-              .replace(/\s+/g, "-") !== "puerto-rico"
-        );
+        // 2. Filter ONLY allowed categories
+        const filteredNews = newsData.filter((item) => {
+          const cat = (item.category?.category_name || "")
+            .toLowerCase()
+            .replace(/\s+/g, "-");
+          return ALLOWED_CATEGORIES.includes(cat);
+        });
 
+        // 3. Pick latest article from allowed categories
         if (filteredNews.length > 0) {
           const latest = filteredNews.sort(
             (a, b) => new Date(b.news_date) - new Date(a.news_date)
@@ -64,24 +75,27 @@ const Footer = () => {
           });
         }
 
-        // Fetch real categories
+        // 4. Fetch categories (optional – but we can use our static list)
+        // If you want dynamic categories from API, keep this; otherwise use static
         const catRes = await fetch(CATEGORIES_API);
         if (!catRes.ok) throw new Error("Categories API failed");
         const catData = await catRes.json();
 
-        // Filter out Puerto Rico category
-        const categories = catData
-          .filter(
-            (cat) =>
-              (cat.category_name || "")
-                .toLowerCase()
-                .replace(/\s+/g, "-") !== "puerto-rico"
-          )
-          .map((cat) => cat.category_name);
+        // Filter only allowed categories from API
+        const allowedCatNames = catData
+          .filter((cat) => {
+            const catName = (cat.category_name || "")
+              .toLowerCase()
+              .replace(/\s+/g, "-");
+            return ALLOWED_CATEGORIES.includes(catName);
+          })
+          .map((cat) => cat.category_name); // keep original casing for display
 
-        setPopularCategories(categories);
+        setPopularCategories(allowedCatNames.length > 0 ? allowedCatNames : ALLOWED_CATEGORIES);
       } catch (err) {
         console.error("Footer fetch error:", err);
+        // Fallback to static categories if API fails
+        setPopularCategories(ALLOWED_CATEGORIES);
       } finally {
         setLoading(false);
       }
@@ -90,7 +104,7 @@ const Footer = () => {
     fetchFooterData();
   }, []);
 
-  // Schema
+  // Schema (unchanged)
   const footerSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -113,7 +127,7 @@ const Footer = () => {
       {/* Main Content */}
       <div className="px-5 pt-10 md:px-[8%] lg:px-[3%] xl:max-w-7xl xl:mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-12 mb-12">
-          {/* Magazine Info */}
+          {/* Magazine Info (unchanged) */}
           <div>
             <h2 className="text-2xl lg:text-3xl font-bold mb-5 pb-4 border-l-4 border-[#d43939] pl-4">
               Shadow Ledger
@@ -130,7 +144,7 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Featured Article – real latest news */}
+          {/* Featured Article – now only from allowed categories */}
           <div className="relative overflow-hidden shadow-xl group">
             {loading ? (
               <div className="w-full h-64 md:h-72 bg-gray-800 flex items-center justify-center text-white">
@@ -169,7 +183,7 @@ const Footer = () => {
             )}
           </div>
 
-          {/* Popular Tags – real categories from API */}
+          {/* Popular Tags – only your selected categories */}
           <div>
             <h3 className="text-2xl lg:text-3xl font-bold mb-5 pb-4 border-l-4 border-[#d43939] pl-4">
               Categories
@@ -197,7 +211,7 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Newsletter */}
+      {/* Newsletter (unchanged) */}
       <div className="bg-[#d43939] px-6 py-12 md:px-12 md:py-10">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3">
@@ -228,7 +242,7 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Bottom Bar */}
+      {/* Bottom Bar (unchanged) */}
       <div className="bg-gray-100 text-gray-700 px-5 py-5 md:px-[8%] lg:px-[10%]">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-sm">
           <p>© {currentYear} SHADOW LEDGER. ALL RIGHTS RESERVED.</p>
@@ -243,7 +257,7 @@ const Footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-600 hover:text-[#d43939] transition-colors text-xl p-2 rounded-full hover:bg-gray-200"
-                  aria-label={social.aria}
+                  aria-label={social.label}
                   title={social.label}
                 >
                   <Icon />

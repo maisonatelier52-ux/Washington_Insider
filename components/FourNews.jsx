@@ -119,33 +119,95 @@
 //     </section>
 //   );
 // }
+"use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-// Static dummy author – same for all cards (no data source needed)
-const dummyAuthor = {
-  name: "News Desk",
-  slug: "news-desk",
+/* CATEGORY → AUTHOR ID */
+
+const categoryAuthorMap = {
+  business: 1,
+  world: 2,
+  finance: 3,
+  technology: 4,
+  politics: 5,
+  lifestyle: 6,
+  opinion: 7,
+  investigation: 8
 };
 
 function ArticleCard({ lawandjusticeArticles, category }) {
-  // Safe defaults for all fields
+
+  const [author, setAuthor] = useState(null);
+
   const cat = lawandjusticeArticles.category || category || "news";
-  const image = lawandjusticeArticles.image || lawandjusticeArticles.heroImage || "/images/placeholder.webp";
-  const title = lawandjusticeArticles.heading || lawandjusticeArticles.metaTitle || "Untitled";
+
+  const image =
+    lawandjusticeArticles.image ||
+    lawandjusticeArticles.heroImage ||
+    "/images/placeholder.webp";
+
+  const title =
+    lawandjusticeArticles.heading ||
+    lawandjusticeArticles.metaTitle ||
+    "Untitled";
+
   const href = `/${cat}/${lawandjusticeArticles.slug || "#"}`;
-  const excerpt = lawandjusticeArticles.excerpt || lawandjusticeArticles.metaDescription || "";
-  const date = lawandjusticeArticles.date || new Date().toISOString().split("T")[0];
+
+  const excerpt =
+    lawandjusticeArticles.excerpt ||
+    lawandjusticeArticles.metaDescription ||
+    "";
+
+  const date =
+    lawandjusticeArticles.date ||
+    new Date().toISOString().split("T")[0];
+
   const alt = lawandjusticeArticles.alt || title;
-  const author = dummyAuthor; // always dummy
+
+  /*
+  FETCH AUTHOR BASED ON CATEGORY
+  */
+
+  useEffect(() => {
+
+    async function fetchAuthor() {
+
+      const authorId = categoryAuthorMap[cat] || 1;
+
+      try {
+
+        const res = await fetch(
+          `https://my-api-usa.com/p16/API/api/client/${authorId}`
+        );
+
+        const data = await res.json();
+
+        if (data.status) {
+          setAuthor(data.data);
+        }
+
+      } catch (error) {
+        console.error("Author fetch error:", error);
+      }
+
+    }
+
+    fetchAuthor();
+
+  }, [cat]);
 
   return (
     <article className="group flex flex-col">
 
       {/* Image */}
+
       <Link href={href} title={title} className="block overflow-hidden">
+
         <div className="relative w-full aspect-[15/9] overflow-hidden">
+
           <Image
             src={image}
             alt={alt}
@@ -154,43 +216,61 @@ function ArticleCard({ lawandjusticeArticles, category }) {
             className="object-cover group-hover:scale-105 transition-transform duration-300"
             loading="lazy"
           />
+
         </div>
+
       </Link>
 
       {/* Date */}
+
       <div className="mt-3 text-xs text-gray-500">
+
         <time dateTime={new Date(date).toISOString()}>
           {date}
         </time>
+
       </div>
 
       {/* Title */}
+
       <Link href={href} title={title} className="mt-1 block">
+
         <h2 className="text-lg font-extrabold text-gray-900 leading-snug line-clamp-2 group-hover:text-red-600 transition-colors duration-200">
           {title}
         </h2>
+
       </Link>
 
-      {/* Excerpt + Read More */}
+      {/* Excerpt */}
+
       <Link href={href} title={`Read more: ${title}`} className="mt-2 block">
+
         <p className="text-sm text-gray-600 leading-relaxed line-clamp-3">
+
           {excerpt}{" "}
+
           <span className="text-red-600 font-semibold hover:underline">
             Read More
           </span>
+
         </p>
+
       </Link>
 
       {/* Author + Category */}
+
       <div className="flex items-center gap-2 mt-3 text-xs">
+
         <Link
-          href={`/authors/${author.slug}`}
-          title={`Articles by ${author.name}`}
+          href={`/author/${author?.url || "news-desk"}`}
+          title={`Articles by ${author?.name || "News Desk"}`}
           className="font-medium text-gray-700 hover:text-red-600 transition-colors"
         >
-          {author.name}
+          {author?.name || "News Desk"}
         </Link>
+
         <span className="text-gray-400">•</span>
+
         <Link
           href={`/${cat}`}
           title={`View all ${cat} articles`}
@@ -198,15 +278,17 @@ function ArticleCard({ lawandjusticeArticles, category }) {
         >
           {cat.replace(/-/g, " ")}
         </Link>
+
       </div>
+
     </article>
   );
 }
 
 export default function ArticleGrid({ lawandjusticeArticles = [], category }) {
+
   if (!lawandjusticeArticles.length) return null;
 
-  // Show up to 4 cards
   const cards = lawandjusticeArticles.slice(0, 4);
 
   return (
@@ -215,13 +297,17 @@ export default function ArticleGrid({ lawandjusticeArticles = [], category }) {
       aria-label="Latest articles"
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-10">
+
         {cards.map((article, index) => (
+
           <ArticleCard
             key={article.slug || `${category}-${index}`}
             lawandjusticeArticles={article}
             category={category}
           />
+
         ))}
+
       </div>
     </section>
   );

@@ -248,6 +248,7 @@
 //     </main>
 //   );
 // }
+
 import Image from "next/image";
 import Link from "next/link";
 import LatestNews from "../components/LatestNews";
@@ -259,19 +260,36 @@ import Sidebar from "../components/Sidebar";
 import TrendingFeatured from "../components/TrendingFeatured";
 
 // ══════════════════════════════════════════════════════════════════════════════
-// ⚙️  ONE PLACE — change this when your real domain is ready
-// ══════════════════════════════════════════════════════════════════════════════
-const SITE_URL  = "https://shadowledger-nu.vercel.app";
+// ⚙️ SITE SETTINGS
 // ══════════════════════════════════════════════════════════════════════════════
 
-const SITE_NAME        = "Shadow Ledger";
-const SITE_DESCRIPTION = "Shadow Ledger delivers breaking news, in-depth investigations, and analysis across business, politics, technology, finance, and world affairs.";
-const SITE_TWITTER     = "@shadowledger";
-const SITE_LOGO        = `${SITE_URL}/images/logo.webp`;
+const SITE_URL = "https://shadowledger-nu.vercel.app";
+const SITE_NAME = "Shadow Ledger";
+const SITE_DESCRIPTION =
+  "Shadow Ledger delivers breaking news, in-depth investigations, and analysis across business, politics, technology, finance, and world affairs.";
 
-const API_URL  = "https://my-api-usa.com/p16/API/api/news";
+const SITE_TWITTER = "@shadowledger";
+const SITE_LOGO = `${SITE_URL}/images/logo.webp`;
 
-// ── Fetch ─────────────────────────────────────────────────────────────────────
+const API_URL = "https://my-api-usa.com/p16/API/api/news";
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ✅ ALLOWED CATEGORIES
+// ══════════════════════════════════════════════════════════════════════════════
+
+const ALLOWED_CATEGORIES = [
+  "business",
+  "world",
+  "finance",
+  "technology",
+  "politics",
+  "lifestyle",
+  "opinion",
+  "investigation",
+];
+
+// ── Fetch News ────────────────────────────────────────────────────────────────
+
 async function getNews() {
   try {
     const res = await fetch(API_URL, { cache: "no-store" });
@@ -283,307 +301,191 @@ async function getNews() {
   }
 }
 
-// ── Static dummy author ───────────────────────────────────────────────────────
+// ── Dummy Author ─────────────────────────────────────────────────────────────
+
 const dummyAuthor = {
-  name:         "News Desk",
+  name: "News Desk",
   profileImage: "/images/default-author.webp",
-  country:      "USA",
-  slug:         "news-desk",
+  country: "USA",
+  slug: "news-desk",
 };
 
-// ════════════════════════════════════════════════════════════════════════════
-// METADATA  (Next.js App Router — exported from page or layout)
-// ════════════════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════════════════
+// SEO METADATA
+// ══════════════════════════════════════════════════════════════════════════════
+
 export const metadata = {
-  // ── Core ──────────────────────────────────────────────────────────────────
   title: {
-    default:  `${SITE_NAME} — Breaking News, Politics, Business & World`,
+    default: `${SITE_NAME} — Breaking News, Politics, Business & World`,
     template: `%s | ${SITE_NAME}`,
   },
+
   description: SITE_DESCRIPTION,
 
-  // ── Canonical ─────────────────────────────────────────────────────────────
   alternates: { canonical: SITE_URL },
 
-  // ── Robots ────────────────────────────────────────────────────────────────
   robots: {
-    index:  true,
+    index: true,
     follow: true,
-    googleBot: {
-      index:                true,
-      follow:               true,
-      "max-snippet":        -1,
-      "max-image-preview":  "large",
-      "max-video-preview":  -1,
-    },
   },
 
-  // ── Open Graph ────────────────────────────────────────────────────────────
   openGraph: {
-    type:        "website",
-    siteName:     SITE_NAME,
-    title:       `${SITE_NAME} — Breaking News, Politics, Business & World`,
-    description:  SITE_DESCRIPTION,
-    url:          SITE_URL,
-    locale:       "en_US",
-    images: [{
-      url:    `${SITE_URL}/images/og-home.webp`,
-      width:  1200,
-      height: 630,
-      alt:    `${SITE_NAME} — News Homepage`,
-    }],
+    type: "website",
+    siteName: SITE_NAME,
+    title: `${SITE_NAME} — Breaking News, Politics, Business & World`,
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
+    locale: "en_US",
+    images: [
+      {
+        url: `${SITE_URL}/images/og-home.webp`,
+        width: 1200,
+        height: 630,
+        alt: `${SITE_NAME} homepage`,
+      },
+    ],
   },
 
-  // ── Twitter / X ───────────────────────────────────────────────────────────
   twitter: {
-    card:        "summary_large_image",
-    site:         SITE_TWITTER,
-    creator:      SITE_TWITTER,
-    title:       `${SITE_NAME} — Breaking News, Politics, Business & World`,
-    description:  SITE_DESCRIPTION,
-    images: [{
-      url: `${SITE_URL}/images/og-home.webp`,
-      alt: `${SITE_NAME} homepage`,
-    }],
-  },
-
-  // ── Verification / extras ─────────────────────────────────────────────────
-  other: {
-    "google-site-verification": "YOUR_VERIFICATION_CODE_HERE",
+    card: "summary_large_image",
+    site: SITE_TWITTER,
+    creator: SITE_TWITTER,
+    title: `${SITE_NAME} — Breaking News, Politics, Business & World`,
+    description: SITE_DESCRIPTION,
+    images: [`${SITE_URL}/images/og-home.webp`],
   },
 };
 
-// ════════════════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════════════════
 // PAGE COMPONENT
-// ════════════════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════════════════
+
 export default async function Home() {
   const news = await getNews();
 
-  // ── Build categoryPageData from API ───────────────────────────────────────
-  const categoryPageData = news.reduce((acc, item) => {
+  // ════════════════════════════════════════════════════════════════════════
+  // FILTER ONLY ALLOWED CATEGORIES
+  // ════════════════════════════════════════════════════════════════════════
+
+  const filteredNews = news.filter((item) => {
+    const categoryName = item.category?.category_name?.toLowerCase();
+    return ALLOWED_CATEGORIES.includes(categoryName);
+  });
+
+  // ════════════════════════════════════════════════════════════════════════
+  // GROUP BY CATEGORY
+  // ════════════════════════════════════════════════════════════════════════
+
+  const categoryPageData = filteredNews.reduce((acc, item) => {
     const categoryName = item.category?.category_name
       ?.toLowerCase()
       .replace(/\s+/g, "-");
-    if (!categoryName || categoryName === "puerto-rico") return acc;
-    if (!acc[categoryName]) acc[categoryName] = [];
+
+    if (!acc[categoryName]) {
+      acc[categoryName] = [];
+    }
 
     acc[categoryName].push({
-      slug:            item.encode_title || "#",
-      heading:         item.title || item.news_title || "Untitled",
-      metaTitle:       item.meta_title || "",
-      image:           item.photo_url || "/images/placeholder.webp",
-      heroImage:       item.photo_url || "/images/placeholder.webp",
-      alt:             item.img_alt || "News image",
-      date:            item.news_date || new Date().toISOString().split("T")[0],
-      excerpt:         item.news_content_short || item.excerpt || "",
+      slug: item.encode_title || "#",
+      heading: item.title || item.news_title || "Untitled",
+      metaTitle: item.meta_title || "",
+      image: item.photo_url || "/images/placeholder.webp",
+      heroImage: item.photo_url || "/images/placeholder.webp",
+      alt: item.img_alt || "News image",
+      date: item.news_date || new Date().toISOString().split("T")[0],
+      excerpt: item.news_content_short || "",
       metaDescription: item.meta_description || "",
-      category:        categoryName,
+      category: categoryName,
     });
 
     return acc;
   }, {});
 
-  // ── Flatten all articles ───────────────────────────────────────────────────
+  // ════════════════════════════════════════════════════════════════════════
+  // FLATTEN ARTICLES
+  // ════════════════════════════════════════════════════════════════════════
+
   const allArticles = Object.entries(categoryPageData).flatMap(
     ([category, articles]) =>
-      articles.map((article) => ({ ...article, category, author: dummyAuthor }))
+      articles.map((article) => ({
+        ...article,
+        category,
+        author: dummyAuthor,
+      }))
   );
 
   const sortByDate = (arr) =>
     [...arr].sort((a, b) => new Date(b.date) - new Date(a.date));
 
-  // ── Section slices ─────────────────────────────────────────────────────────
-  const latestArticles       = sortByDate(allArticles).slice(0, 4);
-  const politicsArticles     = sortByDate(categoryPageData["politics"]     || []).slice(0, 2).map(a => ({ ...a, author: dummyAuthor }));
-  const trendingArticles     = sortByDate(categoryPageData["business"]     || []).slice(0, 4).map(a => ({ ...a, author: dummyAuthor }));
-  const featuredArticles     = sortByDate(categoryPageData["technology"]   || []).slice(0, 4).map(a => ({ ...a, author: dummyAuthor }));
-  const UsnewsArticles       = sortByDate(categoryPageData["world"]        || []).map(a => ({ ...a, author: dummyAuthor }));
-  const lawandjusticeArticles= sortByDate(categoryPageData["finance"]      || []).slice(0, 4).map(a => ({ ...a, author: dummyAuthor }));
-  const civilRightsArticles  = sortByDate(categoryPageData["lifestyle"]    || []).slice(0, 4).map(a => ({ ...a, author: dummyAuthor }));
-  const investigationArticles= sortByDate(categoryPageData["investigation"]|| []).slice(0, 4).map(a => ({ ...a, author: dummyAuthor }));
-  const opinionArticles      = sortByDate(categoryPageData["opinion"]      || []).slice(0, 6).map(a => ({ ...a, author: dummyAuthor }));
+  // ════════════════════════════════════════════════════════════════════════
+  // SECTIONS
+  // ════════════════════════════════════════════════════════════════════════
+
+  const latestArticles = sortByDate(allArticles).slice(0, 4);
+
+  const politicsArticles = sortByDate(categoryPageData["politics"] || [])
+    .slice(0, 2)
+    .map((a) => ({ ...a, author: dummyAuthor }));
+
+  const trendingArticles = sortByDate(categoryPageData["business"] || [])
+    .slice(0, 4)
+    .map((a) => ({ ...a, author: dummyAuthor }));
+
+  const featuredArticles = sortByDate(categoryPageData["technology"] || [])
+    .slice(0, 4)
+    .map((a) => ({ ...a, author: dummyAuthor }));
+
+  const UsnewsArticles = sortByDate(categoryPageData["world"] || []).map(
+    (a) => ({ ...a, author: dummyAuthor })
+  );
+
+  const lawandjusticeArticles = sortByDate(categoryPageData["finance"] || [])
+    .slice(0, 4)
+    .map((a) => ({ ...a, author: dummyAuthor }));
+
+  const civilRightsArticles = sortByDate(categoryPageData["lifestyle"] || [])
+    .slice(0, 4)
+    .map((a) => ({ ...a, author: dummyAuthor }));
+
+  const investigationArticles = sortByDate(
+    categoryPageData["investigation"] || []
+  )
+    .slice(0, 4)
+    .map((a) => ({ ...a, author: dummyAuthor }));
+
+  const opinionArticles = sortByDate(categoryPageData["opinion"] || [])
+    .slice(0, 6)
+    .map((a) => ({ ...a, author: dummyAuthor }));
+
+  // ════════════════════════════════════════════════════════════════════════
+  // LATEST NEWS ITEMS
+  // ════════════════════════════════════════════════════════════════════════
 
   const latestNewsItems = latestArticles.map((article, index) => ({
-    id:       article.id || index,
-    image:    article.image,
-    alt:      article.alt || article.heading,
-    heading:  article.heading || article.metaTitle,
-    slug:     article.slug,
+    id: index,
+    image: article.image,
+    alt: article.alt || article.heading,
+    heading: article.heading || article.metaTitle,
+    slug: article.slug,
     category: article.category,
-    date:     article.date,
-    author:   dummyAuthor,
+    date: article.date,
+    author: dummyAuthor,
   }));
 
   // ════════════════════════════════════════════════════════════════════════
-  // JSON-LD SCHEMAS
+  // PAGE UI
   // ════════════════════════════════════════════════════════════════════════
 
-  // 1. WebSite — enables Google Sitelinks Searchbox + entity anchor
-  const webSiteJsonLd = {
-    "@context": "https://schema.org",
-    "@type":    "WebSite",
-    "@id":      `${SITE_URL}/#website`,
-    url:         SITE_URL,
-    name:        SITE_NAME,
-    description: SITE_DESCRIPTION,
-    inLanguage:  "en-US",
-    // Sitelinks searchbox (Google may show a search bar under your SERP result)
-    potentialAction: {
-      "@type":       "SearchAction",
-      target: {
-        "@type": "EntryPoint",
-        urlTemplate: `${SITE_URL}/search?q={search_term_string}`,
-      },
-      "query-input": "required name=search_term_string",
-    },
-    publisher: { "@id": `${SITE_URL}/#organization` },
-  };
-
-  // 2. Organization — publisher entity (referenced by all articles)
-  const organizationJsonLd = {
-    "@context": "https://schema.org",
-    "@type":    "NewsMediaOrganization",
-    "@id":      `${SITE_URL}/#organization`,
-    name:        SITE_NAME,
-    url:         SITE_URL,
-    logo: {
-      "@type": "ImageObject",
-      "@id":   `${SITE_URL}/#logo`,
-      url:      SITE_LOGO,
-      width:    512,
-      height:   512,
-      caption:  SITE_NAME,
-    },
-    image: { "@id": `${SITE_URL}/#logo` },
-    sameAs: [
-      "https://facebook.com/shadowledger",
-      "https://x.com/shadowledger",
-      "https://www.instagram.com/shadowledger",
-    ],
-    contactPoint: {
-      "@type":     "ContactPoint",
-      contactType: "Editorial",
-      url:          SITE_URL,
-    },
-  };
-
-  // 3. WebPage — homepage entity
-  const webPageJsonLd = {
-    "@context":  "https://schema.org",
-    "@type":     "WebPage",
-    "@id":       `${SITE_URL}/#webpage`,
-    url:          SITE_URL,
-    name:        `${SITE_NAME} — Breaking News, Politics, Business & World`,
-    description:  SITE_DESCRIPTION,
-    inLanguage:   "en-US",
-    isPartOf:    { "@id": `${SITE_URL}/#website` },
-    about:       { "@id": `${SITE_URL}/#organization` },
-    primaryImageOfPage: {
-      "@type": "ImageObject",
-      url:     `${SITE_URL}/images/og-home.webp`,
-      width:   1200,
-      height:  630,
-    },
-    // Speakable — tells Google which elements to read in voice / AIO results
-    speakable: {
-      "@type":      "SpeakableSpecification",
-      cssSelector:  [".site-tagline", ".latest-news-heading", "h1", "h2"],
-    },
-    breadcrumb: {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-      ],
-    },
-  };
-
-  // 4. BreadcrumbList — homepage breadcrumb
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type":    "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-    ],
-  };
-
-  // 5. ItemList — latest headlines (AIO + Discover feed signal)
-  const itemListJsonLd = {
-    "@context":   "https://schema.org",
-    "@type":      "ItemList",
-    name:         "Latest News",
-    description:  `The most recent headlines from ${SITE_NAME}`,
-    url:           SITE_URL,
-    numberOfItems: latestArticles.length,
-    itemListElement: latestArticles.map((article, i) => ({
-      "@type":   "ListItem",
-      position:  i + 1,
-      url:      `${SITE_URL}/${article.category}/${article.slug}`,
-      name:      article.heading,
-      image: {
-        "@type": "ImageObject",
-        url:      article.image?.startsWith("http")
-          ? article.image
-          : `${SITE_URL}${article.image}`,
-        caption: article.heading,
-      },
-    })),
-  };
-
-  // 6. FAQPage — category nav as AIO-extractable Q&A (helps surface sections)
-  const faqJsonLd = {
-    "@context": "https://schema.org",
-    "@type":    "FAQPage",
-    mainEntity: [
-      {
-        "@type": "Question",
-        name:    "What topics does Shadow Ledger cover?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text:    "Shadow Ledger covers breaking news across Business, World Affairs, Finance, Technology, Politics, Lifestyle, Opinion, and Investigation.",
-        },
-      },
-      {
-        "@type": "Question",
-        name:    "Where can I find the latest political news on Shadow Ledger?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text:    `Visit ${SITE_URL}/politics for the latest political analysis, election coverage, and government news.`,
-        },
-      },
-      {
-        "@type": "Question",
-        name:    "Does Shadow Ledger publish investigative journalism?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text:    `Yes. Shadow Ledger's Investigations section at ${SITE_URL}/investigation publishes in-depth original reporting on corporate, political, and public interest stories.`,
-        },
-      },
-    ],
-  };
-
-  // ─────────────────────────────────────────────────────────────────────────
   return (
     <main className="min-h-screen bg-white">
 
-      {/* ══ JSON-LD — 6 schemas ══ */}
-      <script type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteJsonLd) }} />
-      <script type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} />
-      <script type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageJsonLd) }} />
-      <script type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
-      <script type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }} />
-      <script type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
-
       <div className="max-w-full mx-auto px-4 md:px-[10%] py-8 lg:py-5">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">
+
           <div className="lg:col-span-3">
 
             <LatestNews latestNewsItems={latestNewsItems} />
+
             <PoliticsNews politicsArticles={politicsArticles} />
 
             <TrendingFeatured
@@ -592,25 +494,6 @@ export default async function Home() {
               featuredArticles={featuredArticles}
               featuredCategory="technology"
             />
-
-            {/* Ad / Promo Banner */}
-            <div className="w-full bg-white py-[30px] pb-10 mx-auto text-center p-5 max-w-[1300px]">
-              <div className="max-w-[1100px] mx-auto">
-                <Link
-                  href="https://www.progresskingdom.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Image
-                    src="/images/progresskingdom.webp"
-                    alt="Progress Kingdom"
-                    width={1100}
-                    height={125}
-                    className="w-full h-auto rounded-md"
-                  />
-                </Link>
-              </div>
-            </div>
 
             {UsnewsArticles[0] && (
               <ArticleCard article={UsnewsArticles[0]} category="world" />
@@ -626,71 +509,29 @@ export default async function Home() {
               category="lifestyle"
             />
 
-            {/* Investigation grid */}
-            <section className="w-full py-5">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {investigationArticles.map((article) => {
-                  const title = article.heading || article.metaTitle || "Untitled";
-                  const image = article.image || article.heroImage || "/images/placeholder.webp";
-
-                  return (
-                    <div key={article.slug} className="flex flex-col">
-                      <div className="flex gap-4">
-                        <Link
-                          href={`/investigation/${article.slug}`}
-                          className="flex-shrink-0"
-                          title={title}
-                        >
-                          <div className="relative w-[125px] h-[100px] overflow-hidden group">
-                            <Image
-                              src={image}
-                              alt={article.alt || title}
-                              fill
-                              sizes="150px"
-                              className="object-cover group-hover:scale-105 transition-transform duration-300"
-                            />
-                          </div>
-                        </Link>
-
-                        <div className="flex-1 flex flex-col min-w-0">
-                          <Link
-                            href={`/investigation/${article.slug}`}
-                            className="block group"
-                            title={title}
-                          >
-                            <h3 className="text-lg font-bold text-black leading-snug break-words group-hover:text-[#d43939] transition-colors duration-300">
-                              {title.length > 65 ? `${title.slice(0, 65)}...` : title}
-                            </h3>
-                          </Link>
-                          <div className="mt-3 w-20 h-0.5 bg-gray-300" />
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </section>
-
           </div>
 
-          {/* Sidebar */}
           <div className="lg:col-span-1 px-1">
             <Sidebar
               heroArticle={opinionArticles[0]}
               selectedArticles={opinionArticles.slice(1, 3)}
               smallArticles={opinionArticles.slice(4, 6)}
               categories={[
-                "business", "world", "finance", "technology",
-                "politics", "lifestyle", "opinion", "investigation",
+                "business",
+                "world",
+                "finance",
+                "technology",
+                "politics",
+                "lifestyle",
+                "opinion",
+                "investigation",
               ]}
-              bannerImage="/images/demo.webp"
-              bannerText="Don't Miss 30% Sale"
-              bannerHref="/"
             />
           </div>
 
         </div>
       </div>
+
     </main>
   );
 }

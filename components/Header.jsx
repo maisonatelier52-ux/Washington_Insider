@@ -15,6 +15,17 @@ import {
 // API
 const API_URL = "https://my-api-usa.com/p16/API/api/news";
 
+const ALLOWED_CATEGORIES = [
+  "business",
+  "world",
+  "finance",
+  "technology",
+  "politics",
+  "lifestyle",
+  "opinion",
+  "investigation",
+];
+
 // ── Breaking News Ticker ─────────────────────────────────────────────────────
 function BreakingNewsTicker({ articles }) {
   const ticker = useMemo(() => {
@@ -99,20 +110,18 @@ function SearchInput({ className = "", onResultClick }) {
 
         const searchItems = data
           .filter((item) => {
-            const cat = (item.category?.category_name || "").toLowerCase();
-            // Simplified & robust filter: exclude ANY category containing "puerto" (catches variations like "puerto rico", "puerto-rico", etc.)
-            const shouldExclude = cat.includes("puerto");
-            if (shouldExclude) {
-              console.log(`Excluding Puerto-related item: Category="${cat}", Title="${item.title || item.news_title}"`); // Debug log
-            }
-            return !shouldExclude;
+            const cat = item.category?.category_name?.toLowerCase();
+
+            // only allow selected categories
+            return ALLOWED_CATEGORIES.includes(cat);
           })
           .map((item) => ({
             heading: item.title || item.news_title || "Untitled",
             slug: item.encode_title || "#",
-            category: item.category?.category_name
-              ?.toLowerCase()
-              .replace(/\s+/g, "-") || "news",
+            category:
+              item.category?.category_name
+                ?.toLowerCase()
+                .replace(/\s+/g, "-") || "news",
             date: item.news_date || "",
           }));
 
@@ -133,15 +142,16 @@ function SearchInput({ className = "", onResultClick }) {
   }, []);
 
   const handleInput = (e) => {
-    const value = e.target.value; // Raw value - no trim to allow spaces
+    const value = e.target.value; // allow spaces
     setQuery(value);
 
-    if (value.length < 2) {
+    if (value.trim().length < 2) {
       setResults([]);
       return;
     }
 
     const allItems = window.allSearchItems || [];
+
     const filtered = allItems
       .filter((item) =>
         item.heading?.toLowerCase().includes(value.toLowerCase())
@@ -238,22 +248,18 @@ export default function Header() {
 
         const latest = data
           .filter((item) => {
-            const cat = (item.category?.category_name || "").toLowerCase();
-            // Same robust filter for ticker
-            const shouldExclude = cat.includes("puerto");
-            if (shouldExclude) {
-              console.log(`Excluding Puerto-related breaking item: Category="${cat}", Title="${item.title || item.news_title}"`); // Debug
-            }
-            return !shouldExclude;
+            const cat = item.category?.category_name?.toLowerCase();
+            return ALLOWED_CATEGORIES.includes(cat);
           })
           .sort((a, b) => new Date(b.news_date) - new Date(a.news_date))
           .slice(0, 8)
           .map((item) => ({
             slug: item.encode_title || "#",
             heading: item.title || item.news_title || "Untitled",
-            category: item.category?.category_name
-              ?.toLowerCase()
-              .replace(/\s+/g, "-") || "news",
+            category:
+              item.category?.category_name
+                ?.toLowerCase()
+                .replace(/\s+/g, "-") || "news",
           }));
 
         setBreakingArticles(latest);

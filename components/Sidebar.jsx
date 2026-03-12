@@ -679,7 +679,7 @@ function BannerAd({ image, text, href = "/" }) {
   return (
     <div className="mb-6">
       <Link href={href} title={text} className="block group relative overflow-hidden">
-        <div className="relative w-full h-44">
+        <div className="relative w-full h-90">
           <Image
             src={image}
             alt={text || "Advertisement"}
@@ -689,11 +689,7 @@ function BannerAd({ image, text, href = "/" }) {
             loading="lazy"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-          {text && (
-            <div className="absolute bottom-0 left-0 right-0 px-4 py-3">
-              <p className="text-white text-base font-extrabold leading-snug">{text}</p>
-            </div>
-          )}
+          
         </div>
       </Link>
     </div>
@@ -725,22 +721,7 @@ function Categories({ categories }) {
   );
 }
 
-// ─────────────────────────────────────────────
-// Display Ad
-// ─────────────────────────────────────────────
-function DisplayAd({ adCode }) {
-  return (
-    <div className="mb-6">
-      {adCode ? (
-        <div dangerouslySetInnerHTML={{ __html: adCode }} />
-      ) : (
-        <div className="w-full h-[250px] bg-gray-100 border border-gray-300 flex items-center justify-center text-gray-400 text-xs font-semibold uppercase shadow-sm">
-          300 × 250 Advertisement
-        </div>
-      )}
-    </div>
-  );
-}
+
 
 // ─────────────────────────────────────────────
 // MAIN SIDEBAR
@@ -752,8 +733,7 @@ export default function Sidebar({
   categories,
   bannerImage,
   bannerText,
-  bannerHref,
-  adCode,
+  bannerHref
 }) {
   return (
     <aside className="w-full lg:max-w-xs mx-auto lg:mx-0 lg:sticky lg:top-4">
@@ -763,9 +743,9 @@ export default function Sidebar({
       <SelectedArticles articles={selectedArticles} />
       <SmallArticleList articles={smallArticles} />
       <SocialNetwork />
-      <BannerAd image={bannerImage} text={bannerText} href={bannerHref} />
       <Categories categories={categories} />
-      <DisplayAd adCode={adCode} />
+      <BannerAd image={bannerImage} text={bannerText} href={bannerHref} />
+      
 
     </aside>
   );

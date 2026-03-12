@@ -204,8 +204,6 @@
 //     </div>
 //   );
 // }
-
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -213,14 +211,57 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-
 export default function LatestNews({ latestNewsItems = [] }) {
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [authors, setAuthors] = useState({});
 
   const currentItem = latestNewsItems[currentIndex] || {};
 
-  // Auto slide every 5 seconds
+  const categoryAuthorMap = {
+    business: 1,
+    world: 2,
+    finance: 3,
+    technology: 4,
+    politics: 5,
+    lifestyle: 6,
+    opinion: 7,
+    investigation: 8
+  };
+
+  const authorId = categoryAuthorMap[currentItem.category] || 1;
+  const author = authors[authorId];
+
+  useEffect(() => {
+    async function fetchAuthor() {
+      if (!authorId || authors[authorId]) return;
+
+      try {
+        const res = await fetch(
+          `https://my-api-usa.com/p16/API/api/client/${authorId}`
+        );
+
+        if (!res.ok) throw new Error("Author fetch failed");
+
+        const data = await res.json();
+
+        if (data.status && data.data) {
+          setAuthors((prev) => ({
+            ...prev,
+            [authorId]: data.data,
+          }));
+        }
+      } catch (error) {
+        console.error("Author fetch error:", error);
+      }
+    }
+
+    if (currentItem?.category) {
+      fetchAuthor();
+    }
+  }, [currentItem.category, authorId, authors]);
+
   useEffect(() => {
     if (isPaused || latestNewsItems.length <= 1) return;
 
@@ -236,12 +277,9 @@ export default function LatestNews({ latestNewsItems = [] }) {
   };
 
   const prevSlide = () => {
-    setCurrentIndex(
-      (prev) => (prev - 1 + latestNewsItems.length) % latestNewsItems.length
-    );
+    setCurrentIndex((prev) => (prev - 1 + latestNewsItems.length) % latestNewsItems.length);
   };
 
-  // Fallback if no news passed
   if (latestNewsItems.length === 0) {
     return (
       <div className="w-full h-[380px] md:h-[520px] bg-gray-100 flex items-center justify-center text-gray-600 text-lg font-medium">
@@ -249,6 +287,11 @@ export default function LatestNews({ latestNewsItems = [] }) {
       </div>
     );
   }
+
+  // ──────────────────────────────────────────────
+  // Main background image – safe fallback
+  // ──────────────────────────────────────────────
+  const bgImageSrc = currentItem.image || "/images/placeholder.webp";
 
   return (
     <div
@@ -260,20 +303,22 @@ export default function LatestNews({ latestNewsItems = [] }) {
       {/* Background Image */}
       <div className="relative w-full h-[380px] md:h-[520px]">
         <Image
-          src={currentItem.image || "/images/placeholder.webp"}
+          src={bgImageSrc}
           alt={currentItem.alt || currentItem.heading || "Latest news"}
           fill
           priority
           className="object-cover"
           sizes="100vw"
         />
+
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent" />
       </div>
 
-      {/* Content Overlay */}
+      {/* CONTENT */}
       <div className="absolute inset-0 flex items-center justify-center text-center px-6">
-        <div className="max-w-3xl bg-[#162238]/70 px-8 py-8 shadow-2xl shadow-black/40 hover:bg-[#162238]/90 transition-colors duration-300 ">
-          {/* Date + Author */}
+        <div className="max-w-3xl bg-[#162238]/70 px-8 py-8 shadow-2xl shadow-black/40 hover:bg-[#162238]/90 transition-colors duration-300">
+
+          {/* DATE + AUTHOR */}
           <div className="flex items-center justify-center gap-4 mb-4 text-white text-sm flex-wrap">
             <time dateTime={new Date(currentItem.date).toISOString()}>
               {new Date(currentItem.date).toLocaleDateString("en-US", {
@@ -284,41 +329,46 @@ export default function LatestNews({ latestNewsItems = [] }) {
             </time>
 
             <div className="flex items-center gap-2">
-              <div className="relative w-8 h-8 overflow-hidden rounded-full border-2 border-white/50">
-                <Image
-                  src={currentItem.author?.profileImage || "/images/default-author.webp"}
-                  alt={currentItem.author?.name || "Author"}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <span>{currentItem.author?.name || "Staff Reporter"}</span>
-              {currentItem.author?.country && (
-                <span className="text-gray-300 text-xs">({currentItem.author.country})</span>
+              {/* ─── Author avatar – only render if photo exists ─── */}
+              {author?.photo_url ? (
+                <div className="relative w-8 h-8 overflow-hidden rounded-full border-2 border-white/50">
+                  <Image
+                    src={author.photo_url}
+                    alt={author.name || "Author"}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              ) : (
+                <div className="w-8 h-8 rounded-full bg-gray-500 flex items-center justify-center text-white text-xs font-bold">
+                  {author?.name?.[0]?.toUpperCase() || "?"}
+                </div>
               )}
+
+              <span>{author?.name || "Loading author..."}</span>
             </div>
           </div>
 
-          {/* Title */}
+          {/* TITLE */}
           <Link href={`/${currentItem.category}/${currentItem.slug}`}>
             <h2 className="text-2xl md:text-4xl font-bold text-white leading-tight">
               {currentItem.heading || "Untitled"}
             </h2>
           </Link>
 
-          {/* Category */}
+          {/* CATEGORY */}
           <p className="mt-3 text-sm uppercase tracking-wide text-[#d43939]">
             {currentItem.category?.replace(/-/g, " ") || "News"}
           </p>
         </div>
       </div>
 
-      {/* Navigation */}
+      {/* NAVIGATION */}
       {latestNewsItems.length > 1 && (
         <>
           <button
             onClick={prevSlide}
-            className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/50 text-white flex items-center justify-center hover:bg-[#d43939] transition-colors "
+            className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/50 text-white flex items-center justify-center hover:bg-[#d43939] transition-colors"
             aria-label="Previous slide"
           >
             <FaChevronLeft />
@@ -326,7 +376,7 @@ export default function LatestNews({ latestNewsItems = [] }) {
 
           <button
             onClick={nextSlide}
-            className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/50 text-white flex items-center justify-center hover:bg-[#d43939] transition-colors "
+            className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/50 text-white flex items-center justify-center hover:bg-[#d43939] transition-colors"
             aria-label="Next slide"
           >
             <FaChevronRight />

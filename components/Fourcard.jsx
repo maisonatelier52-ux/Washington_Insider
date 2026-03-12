@@ -91,32 +91,55 @@
 //     </section>
 //   );
 // }
+"use client";
 
-
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-// Static dummy author (used for all articles – no JSON needed)
-const dummyAuthor = {
-  name: "News Desk",
-  slug: "news-desk",
-};
-
 function ArticleCard({ article, category }) {
-  // Safe defaults for missing fields
-  const cat = article.category || category || "news";
-  const image = article.image || article.heroImage || "/images/placeholder.webp";
-  const title = article.heading || article.metaTitle || "Untitled";
+  const [author, setAuthor] = useState(null);
+
+  const cat = article.category || category || "lifestyle";
+
+  const image =
+    article.image ||
+    article.heroImage ||
+    "/images/placeholder.webp";
+
+  const title =
+    article.heading ||
+    article.metaTitle ||
+    "Untitled";
+
   const href = `/${cat}/${article.slug || "#"}`;
-  const date = article.date || new Date().toISOString().split("T")[0];
+
+  const date =
+    article.date ||
+    new Date().toISOString().split("T")[0];
+
   const alt = article.alt || title;
 
-  const author = dummyAuthor; // always dummy
+  useEffect(() => {
+    async function fetchAuthor() {
+      try {
+        const res = await fetch("https://my-api-usa.com/p16/API/api/client/6");
+        if (!res.ok) throw new Error("Author fetch failed");
+        
+        const data = await res.json();
+        if (data.status && data.data) {
+          setAuthor(data.data);
+        }
+      } catch (error) {
+        console.error("Author fetch error:", error);
+      }
+    }
+
+    fetchAuthor();
+  }, []); // empty deps = run once
 
   return (
     <article className="group flex flex-col">
-
-      {/* Image */}
       <Link href={href} title={title} className="block overflow-hidden">
         <div className="relative w-full aspect-[15/9] overflow-hidden">
           <Image
@@ -130,28 +153,25 @@ function ArticleCard({ article, category }) {
         </div>
       </Link>
 
-      {/* Date */}
       <div className="mt-3 text-xs text-gray-500">
         <time dateTime={new Date(date).toISOString()}>
           {date}
         </time>
       </div>
 
-      {/* Title */}
       <Link href={href} title={title} className="mt-1 block">
         <h2 className="text-lg font-extrabold text-gray-900 leading-snug line-clamp-2 group-hover:text-red-600 transition-colors duration-200">
           {title}
         </h2>
       </Link>
 
-      {/* Author + Category (below title) */}
       <div className="flex items-center gap-2 mt-3 text-xs">
         <Link
-          href={`/author/${author.slug}`}
-          title={`Articles by ${author.name}`}
+          href={`/author/${author?.url || "lifestyle-author"}`}
+          title={`Articles by ${author?.name || "Lifestyle Reporter"}`}
           className="font-medium text-gray-700 hover:text-red-600 transition-colors"
         >
-          {author.name}
+          {author?.name || "Lifestyle Reporter"}
         </Link>
 
         <span className="text-gray-400">•</span>
@@ -169,9 +189,8 @@ function ArticleCard({ article, category }) {
 }
 
 export default function ArticleGrid({ civilRightsArticles = [], category }) {
-  if (!civilRightsArticles.length) return null;
+  if (!civilRightsArticles?.length) return null;
 
-  // Always show exactly 4 cards
   const cards = civilRightsArticles.slice(0, 4);
 
   return (
@@ -182,7 +201,7 @@ export default function ArticleGrid({ civilRightsArticles = [], category }) {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-10">
         {cards.map((article, index) => (
           <ArticleCard
-            key={article.slug || `${category}-${index}`}
+            key={`${article.slug || "no-slug"}-${index}`}   // ← FIXED HERE
             article={article}
             category={category}
           />
