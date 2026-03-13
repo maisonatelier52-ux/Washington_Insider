@@ -233,7 +233,7 @@ function SelectedArticles({ articles }) {
 
   return (
     <div className="mb-6">
-      <SectionHeader title="Latest News" />
+      <SectionHeader title="OPINION" />
       <ul className="flex flex-col gap-5">
         {filtered.slice(0, 3).map((article) => {
           const image = article.image || article.heroImage || "/images/placeholder.webp";
@@ -256,7 +256,7 @@ function SelectedArticles({ articles }) {
               })
               .catch((err) => console.error("Author fetch failed:", err));
           }, [article.category]);
-
+ 
           return (
             <li key={article.slug || Math.random()}>
               <Link href={href} title={title} className="block group">
