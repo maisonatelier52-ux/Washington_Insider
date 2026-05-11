@@ -1,7 +1,7 @@
 import Link from "next/link";
 
-const SITE_URL = "https://shadowledger-nu.vercel.app";
-const SITE_NAME = "Shadow Ledger";
+const SITE_URL = "https://www.washingtoninsider.org/";
+const SITE_NAME = "Washington Insider";
 
 export const metadata = {
   title: `Privacy Policy — ${SITE_NAME}`,
@@ -105,7 +105,7 @@ export default function PrivacyPolicy() {
 
           <p className="text-black">
             At <strong>{SITE_NAME}</strong>, we are committed to protecting your privacy. 
-            This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website at shadowledger-nu.vercel.app.
+            This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website at {SITE_URL}.
           </p>
 
           <h2 className="font-semibold py-3 text-xl mt-10 text-black">1. Information We Collect</h2>
@@ -180,7 +180,7 @@ export default function PrivacyPolicy() {
             If you have any questions or concerns about this Privacy Policy or our data practices, please contact us at:
           </p>
           <p className="font-medium text-red-600 mt-4">
-            privacy@shadowledger-nu.vercel.app
+            privacy@washingtoninsider.org
           </p>
 
           {/* <div className="mt-16 pt-8 border-t border-gray-200 text-center text-black text-sm">

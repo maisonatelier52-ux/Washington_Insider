@@ -178,10 +178,10 @@ import { notFound } from "next/navigation";
 // ══════════════════════════════════════════════════════════════════════════════
 // ⚙️  ONE PLACE — change when real domain is ready
 // ══════════════════════════════════════════════════════════════════════════════
-const SITE_URL  = "https://shadowledger-nu.vercel.app";
+const SITE_URL  = "https://www.washingtoninsider.org/";
 // ══════════════════════════════════════════════════════════════════════════════
 
-const SITE_NAME = "Shadow Ledger";
+const SITE_NAME = "Washington Insider";
 const SITE_LOGO = `${SITE_URL}/images/logo.webp`;
 const NEWS_API  = "https://my-api-usa.com/p16/API/api/news";
 
@@ -263,8 +263,8 @@ export async function generateMetadata({ params }) {
     // ── Twitter / X ───────────────────────────────────────────────────────
     twitter: {
       card:        "summary_large_image",
-      site:        "@shadowledger",
-      creator:     "@shadowledger",
+      site:        "@washingtoninsider",
+      creator:     "@washingtoninsider",
       title,
       description: config.description,
       images: [{

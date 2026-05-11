@@ -11,10 +11,10 @@ import RelatedNews from "@/components/RelatedNews";
 // ══════════════════════════════════════════════════════════════════════════════
 // ⚙️  CHANGE YOUR DOMAIN HERE — only this one line needs updating
 // ══════════════════════════════════════════════════════════════════════════════
-const SITE_URL = "https://shadowledger-nu.vercel.app";
+const SITE_URL = "https://www.washingtoninsider.org";
 // ══════════════════════════════════════════════════════════════════════════════
 
-const SITE_NAME = "Shadow Ledger";
+const SITE_NAME = "Washington Insider";
 const NEWS_API = "https://my-api-usa.com/p16/API/api/news";
 
 // ── Allowed categories

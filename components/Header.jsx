@@ -287,10 +287,10 @@ export default function Header() {
   ];
 
   const socialLinks = [
-    { icon: RiTwitterXFill, href: "https://facebook.com/shadowledger", label: "X (Twitter)" },
-    { icon: IoLogoReddit, href: "https://x.com/shadowledger", label: "Reddit" },
-    { icon: FaInstagram, href: "https://instagram.com/shadowledger", label: "Instagram" },
-    { icon: BsSubstack , href: "https://instagram.com/shadowledger", label: "Substack" },
+    { icon: RiTwitterXFill, href: "https://facebook.com/washingtoninsider", label: "X (Twitter)" },
+    { icon: IoLogoReddit, href: "https://x.com/washingtoninsider", label: "Reddit" },
+    { icon: FaInstagram, href: "https://instagram.com/washingtoninsider", label: "Instagram" },
+    { icon: BsSubstack , href: "https://instagram.com/washingtoninsider", label: "Substack" },
   ];
 
   return (
@@ -333,7 +333,7 @@ export default function Header() {
           {/* Mobile */}
           <div className="flex items-center justify-between md:hidden">
             <Link href="/" className="text-2xl font-bold">
-              Shadow Ledger
+              Washington Insider
             </Link>
             <button
               onClick={toggleMenu}
@@ -348,7 +348,7 @@ export default function Header() {
           {/* Desktop */}
           <div className="hidden md:flex items-center justify-between">
             <Link href="/" className="text-3xl font-bold mr-8">
-              Shadow Ledger
+              Washington Insider
             </Link>
             <nav className="flex items-center gap-5 flex-1 flex-wrap">
               {navItems.map((item) => (

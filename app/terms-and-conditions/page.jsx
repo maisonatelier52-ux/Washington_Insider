@@ -1,7 +1,7 @@
 import Link from "next/link";
 
-const SITE_URL = "https://shadowledger-nu.vercel.app";
-const SITE_NAME = "Shadow Ledger";
+const SITE_URL = "https://www.washingtoninsider.org/";
+const SITE_NAME = "Washington Insider";
 
 export const metadata = {
   title: `Terms and Conditions | ${SITE_NAME}`,
@@ -99,7 +99,7 @@ export default function TermsAndConditions() {
           <p className="text-black">
             Welcome to <strong>{SITE_NAME}</strong>. These Terms and Conditions
             ("Terms") govern your access to and use of our website located at
-            shadowledger-nu.vercel.app and any related services (collectively, the
+            {SITE_URL} and any related services (collectively, the
             "Service").
           </p>
 
@@ -258,7 +258,7 @@ export default function TermsAndConditions() {
             please contact us at:
           </p>
           <p className="font-medium text-red-600 mt-4">
-            legal@shadowledger-nu.vercel.app
+            legal@washingtoninsider.org
           </p>
 
           {/* <div className="mt-16 pt-8 border-t border-gray-200 text-center text-black text-sm">

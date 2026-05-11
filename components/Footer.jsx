@@ -36,10 +36,10 @@ const Footer = () => {
   ];
 
   const socialLinks = [
-    { icon: RiTwitterXFill, href: "https://facebook.com/shadowledger", label: "X (Twitter)" },
-    { icon: IoLogoReddit, href: "https://x.com/shadowledger", label: "Reddit" },
-    { icon: FaInstagram, href: "https://instagram.com/shadowledger", label: "Instagram" },
-    { icon: BsSubstack , href: "https://instagram.com/shadowledger", label: "Substack" },
+    { icon: RiTwitterXFill, href: "https://facebook.com/washingtoninsider", label: "X (Twitter)" },
+    { icon: IoLogoReddit, href: "https://x.com/washingtoninsider", label: "Reddit" },
+    { icon: FaInstagram, href: "https://instagram.com/washingtoninsider", label: "Instagram" },
+    { icon: BsSubstack , href: "https://instagram.com/washingtoninsider", label: "Substack" },
   ];
 
   // Featured article + categories state
@@ -113,11 +113,11 @@ const Footer = () => {
   const footerSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "Shadow Ledger",
-    url: "https://shadowledger.com",
+    name: "Washington Insider",
+    url: "https://www.washingtoninsider.org",
     potentialAction: {
       "@type": "SubscribeAction",
-      target: "https://shadowledger.com/newsletter",
+      target: "https://www.washingtoninsider.org/newsletter",
     },
   };
 
@@ -135,16 +135,16 @@ const Footer = () => {
           {/* Magazine Info (unchanged) */}
           <div>
             <h2 className="text-2xl lg:text-3xl font-bold mb-5 pb-4 border-l-4 border-[#d43939] pl-4">
-              Shadow Ledger
+              Washington Insider
             </h2>
             <div className="space-y-4 text-gray-300 text-sm leading-relaxed">
               <p>
                 <span className="mr-2">★</span>
-                Consectetur adipiscing elit, sed diam nonumy eirmod tempor indidunt ut labore et dolore magna aliquyam erat...
+                Delivering breaking political news, global affairs, business insights, and cultural stories that shape today’s world.
               </p>
               <p>
                 <span className="mr-2">★</span>
-                At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren...
+                Washington Insider brings trusted journalism, in-depth analysis, and exclusive reports from voices that matter.
               </p>
             </div>
           </div>
@@ -250,7 +250,7 @@ const Footer = () => {
       {/* Bottom Bar (unchanged) */}
       <div className="bg-gray-100 text-gray-700 px-5 py-5 md:px-[8%] lg:px-[10%]">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-sm">
-          <p>© {currentYear} SHADOW LEDGER. ALL RIGHTS RESERVED.</p>
+          <p>© {currentYear} WASHINGTON INSIDER. ALL RIGHTS RESERVED.</p>
 
           <div className="flex items-center gap-6">
             {socialLinks.map((social) => {

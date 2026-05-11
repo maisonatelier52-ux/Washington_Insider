@@ -14,9 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Shadow Ledger",
+  title: "Washington Insider",
   description:
-    "Shadow Ledger is a news site that covers the latest news in the world of technology, business, and finance. We provide in-depth analysis and insights on the latest trends and developments in the industry.",
+    "Washington Insider is a news site that covers the latest news in the world of technology, business, and finance. We provide in-depth analysis and insights on the latest trends and developments in the industry.",
 };
 
 export default function RootLayout({ children }) {

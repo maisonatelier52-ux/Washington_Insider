@@ -11,10 +11,10 @@ import TrendingFeatured from "../components/TrendingFeatured";
 // ══════════════════════════════════════════════════════════════════════════════
 // SITE SETTINGS
 // ══════════════════════════════════════════════════════════════════════════════
-const SITE_URL = "https://shadowledger-nu.vercel.app";
-const SITE_NAME = "Shadow Ledger";
+const SITE_URL = "https://www.washingtoninsider.org/";
+const SITE_NAME = "Washington Insider";
 const SITE_DESCRIPTION =
-  "Shadow Ledger delivers breaking news, in-depth investigations, and analysis across business, politics, technology, finance, and world affairs.";
+  "Washington Insider delivers breaking news, in-depth investigations, and analysis across business, politics, technology, finance, and world affairs.";
 
 const API_URL = "https://my-api-usa.com/p16/API/api/news";
 
@@ -81,8 +81,8 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    site: "@shadowledger",
-    creator: "@shadowledger",
+    site: "@washingtoninsider",
+    creator: "@washingtoninsider",
     title: `${SITE_NAME} — Breaking News, Politics, Business & World`,
     description: SITE_DESCRIPTION,
     images: [`${SITE_URL}/images/og-home.webp`],

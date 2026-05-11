@@ -2,8 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 // Site constants (consistent with your home page)
-const SITE_URL = "https://shadowledger-nu.vercel.app";
-const SITE_NAME = "Shadow Ledger";
+const SITE_URL = "https://www.washingtoninsider.org";
+const SITE_NAME = "Washington Insider";
 
 export const metadata = {
   title: `About ${SITE_NAME} – Independent News & Investigations`,
@@ -32,7 +32,7 @@ export const metadata = {
     card: "summary_large_image",
     title: `About ${SITE_NAME}`,
     description:
-      `Independent journalism on business, politics, technology, finance, and global events.`,
+      `Washington Insider Independent journalism on business, politics, technology, finance, and global events.`,
     images: [`${SITE_URL}/images/logo-og.png`],
   },
 };
